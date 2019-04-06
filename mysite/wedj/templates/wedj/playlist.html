@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -10,17 +11,44 @@
   <link rel="icon" href="https://v4-alpha.getbootstrap.com/favicon.ico">
 
   <title>WeDJ</title>
-  <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/cover/">
-
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   {% load static %}
   <!-- Bootstrap core CSS -->
-  <link href="{% static 'wedj/index_files/bootstrap.css' %}" rel="stylesheet">
-
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <!-- Custom styles for this template -->
   <link href="{% static 'wedj/css/playlist.css' %}" rel="stylesheet">
 </head>
 
 <body>
+
+
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add new link</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="message-text" class="col-form-label">Link:</label>
+              <input type="text" class="form-control" id="message-text"></input>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="add_link()">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="site-wrapper">
 
@@ -41,22 +69,13 @@
         <div class="inner content">
           <div class="card">
             <div class="card-body">
-              This is some text within a card body.<br>
-              This is some text within a card body.<br>
-              This is some text within a card body.<br>
-              This is some text within a card body.<br>
-              This is some text within a card body.<br>
-              This is some text within a card body.<br>
-              This is some text within a card body.<br>
-              This is some text within a card body.<br>
-              This is some text within a card body.<br>
-
+              <ul id="playlist-list" class="list-group">
+              </ul>
             </div>
           </div>
-          <!-- <h1 class="cover-heading" style="font-size: 25vw; padding-bottom: 0.1em">Oops!</h1>
-          <h1 class="cover-heading">404</h1> -->
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Add
+              link</button>
         </div>
-
         <div class="mastfoot">
           <div class="inner">
             <p>WeDJ, 2019</p>
@@ -69,29 +88,17 @@
 
   </div>
 
-  <!-- Bootstrap core JavaScript
-    ================================================== -->
-  <!-- Placed at the end of the document so the pages load faster -->
-  <script src="{% static 'wedj/index_files/jquery-3.js' %}"
-    integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
-    crossorigin="anonymous"></script>
-  <script src="{% static 'wedj/index_files/tether.js' %}"
-    integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
-    crossorigin="anonymous"></script>
-  <script src="{% static 'wedj/index_files/bootstrap.js' %}"></script>
-  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-  <script src="{% static 'wedj/index_files/ie10-viewport-bug-workaround.js' %}"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+  <script src="{% static 'wedj/js/playlist.js' %}"></script>
   <script>
-    function fun() {
-      $.ajax({
-        url: "api/create_playlist/?format=json", success: function (result) {
-          window.location.href = "/p/" + result.link_id
-        }, error: function (result) {
-          alert("Cannot generate link");
-        }
-      });
-    }
+    var playlistId = "{{playlist_id}}";
+    startWs(playlistId);
   </script>
 
 

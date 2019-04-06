@@ -1,7 +1,12 @@
 /*
  * Globals
  */
-
+ 
+ @font-face {
+    font-family: 'Glyphicons Halflings';
+    src: url('../fonts/glyphicons-halflings-regular.eot');
+    src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');
+  }
 /* Links */
 
 a, a:focus, a:hover {
@@ -28,9 +33,7 @@ html, body {
 }
 
 body {
-    color: #fff;
-    text-align: center;
-    text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
+
 }
 
 /* Extra markup and styles for table-esque vertical and horizontal centering */
@@ -71,6 +74,9 @@ body {
 }
 
 .masthead {
+    color: #fff;
+    text-align: center;
+    text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
     margin-bottom: 2rem;
 }
 
@@ -126,6 +132,8 @@ body {
  */
 
 .mastfoot {
+    text-align: center;
+    text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
     color: rgba(255, 255, 255, .5);
 }
 
