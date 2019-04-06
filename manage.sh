@@ -1,0 +1,1 @@
+python3 mysite/manage.py $1

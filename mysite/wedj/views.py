@@ -38,7 +38,7 @@ def index(request):
 
 def playlist(request, playlist_id):
     try:
-        playlist = Playlist.objects.get(pk=playlist_id)
+        playlist = Playlist.objects.get(link_id=playlist_id)
     except Playlist.DoesNotExist:
         return render(request, 'wedj/404.html', context=None)
     return render(request, 'wedj/playlist.html', {'playlist_id': playlist_id})
