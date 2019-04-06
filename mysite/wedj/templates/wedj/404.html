@@ -26,20 +26,19 @@
 
     <div class="site-wrapper-inner">
 
-      <div class="cover-container">
+      <div class="content-container">
 
         <div class="masthead clearfix">
           <div class="inner">
             <h3 class="masthead-brand">WeDJ</h3>
             <nav class="nav nav-masthead">
-              <a class="nav-link active" href="#">Home</a>
+              <a class="nav-link" href="../../">Home</a>
               <a class="nav-link" href="#">Features</a>
-              <a class="nav-link" href="#">Contact</a>
             </nav>
           </div>
         </div>
 
-        <div class="inner cover">
+        <div class="inner content">
           <h1 class="cover-heading" style="font-size: 25vw; padding-bottom: 0.1em">Oops!</h1>
           <h1 class="cover-heading">404</h1>
         </div>
@@ -73,7 +72,7 @@
     function fun() {
       $.ajax({
         url: "api/create_playlist/?format=json", success: function (result) {
-          window.location.href="/p/"+result.link_id
+          window.location.href = "/p/" + result.link_id
         }, error: function (result) {
           alert("Cannot generate link");
         }
