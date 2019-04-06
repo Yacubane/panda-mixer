@@ -1,70 +1,92 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="https://v4-alpha.getbootstrap.com/favicon.ico">
+<html lang="en">
 
-    <title>WeDJ</title>
-    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/cover/">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="https://v4-alpha.getbootstrap.com/favicon.ico">
 
-    {% load static %}
-    <!-- Bootstrap core CSS -->
-    <link href="{% static 'wedj/index_files/bootstrap.css' %}" rel="stylesheet">
+  <title>WeDJ</title>
+  <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/cover/">
 
-    <!-- Custom styles for this template -->
-    <link href="{% static 'wedj/index_files/cover.css' %}"rel="stylesheet">
-  </head>
+  {% load static %}
+  <!-- Bootstrap core CSS -->
+  <link href="{% static 'wedj/index_files/bootstrap.css' %}" rel="stylesheet">
 
-  <body>
+  <!-- Custom styles for this template -->
+  <link href="{% static 'wedj/index_files/cover.css' %}" rel="stylesheet">
+</head>
 
-    <div class="site-wrapper">
+<body>
 
-      <div class="site-wrapper-inner">
+  <div class="site-wrapper">
 
-        <div class="cover-container">
+    <div class="site-wrapper-inner">
 
-          <div class="masthead clearfix">
-            <div class="inner">
-              <h3 class="masthead-brand">WeDJ</h3>
-              <nav class="nav nav-masthead">
-                <a class="nav-link active" href="#">Home</a>
-                <a class="nav-link" href="#">Features</a>
-                <a class="nav-link" href="#">Contact</a>
-              </nav>
-            </div>
+      <div class="cover-container">
+
+        <div class="masthead clearfix">
+          <div class="inner">
+            <h3 class="masthead-brand">WeDJ</h3>
+            <nav class="nav nav-masthead">
+              <a class="nav-link active" href="#">Home</a>
+              <a class="nav-link" href="#">Features</a>
+              <a class="nav-link" href="#">Contact</a>
+            </nav>
           </div>
+        </div>
 
-          <div class="inner cover">
-            <h1 class="cover-heading">WeDJ</h1>
-            <p class="lead">WeDJ is an app, where you can make music playlist cooperatively on YouTube. Click to generate link and share it with friends!</p>
-            <p class="lead">
-              <a href="#" class="btn btn-lg btn-secondary">Generate link (YouTube)</a>
-            </p>
+        <div class="inner cover">
+          <h1 class="cover-heading">WeDJ</h1>
+          <p class="lead">WeDJ is an app, where you can make music playlist cooperatively on YouTube. Click to generate
+            link and share it with friends!</p>
+          <p class="lead">
+            <button id="generate_button" class="btn btn-lg btn-secondary" onclick="fun()">Generate link
+              (YouTube)</button>
+          </p>
+        </div>
+
+        <div class="mastfoot">
+          <div class="inner">
+            <p>WeDJ, 2019</p>
           </div>
-
-          <div class="mastfoot">
-            <div class="inner">
-              <p>WeDJ, 2019</p>
-            </div>
-          </div>
-
         </div>
 
       </div>
 
     </div>
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="{% static 'wedj/index_files/jquery-3.js' %}" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
-    <script src="{% static 'wedj/index_files/tether.js' %}" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-    <script src="{% static 'wedj/index_files/bootstrap.js' %}"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="{% static 'wedj/index_files/ie10-viewport-bug-workaround.js' %}"></script>
-  
+  </div>
 
-</body></html>
+  <!-- Bootstrap core JavaScript
+    ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="{% static 'wedj/index_files/jquery-3.js' %}"
+    integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+    crossorigin="anonymous"></script>
+  <script src="{% static 'wedj/index_files/tether.js' %}"
+    integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+    crossorigin="anonymous"></script>
+  <script src="{% static 'wedj/index_files/bootstrap.js' %}"></script>
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <script src="{% static 'wedj/index_files/ie10-viewport-bug-workaround.js' %}"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script>
+    function fun() {
+      $.ajax({
+        url: "api/create_playlist/?format=json", success: function (result) {
+          window.location.href="/p/"+result.link_id
+        }, error: function (result) {
+          alert("Cannot generate link");
+        }
+      });
+    }
+  </script>
+
+
+</body>
+
+</html>
