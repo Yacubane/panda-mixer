@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 pip3 install django
 pip3 install djangorestframework
 pip3 install channels
