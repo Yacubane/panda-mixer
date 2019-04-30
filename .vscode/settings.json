@@ -1,4 +1,3 @@
 {
     "python.linting.pylintEnabled": true,
-    "terminal.integrated.fontFamily": "'MesloLGL Nerd Font'",
 }
