@@ -71,20 +71,20 @@ class PlaylistConsumer(WebsocketConsumer):
             try:
                 playlist_element = PlaylistElement.objects.get(
                     playlist=playlist, order=order)
+                playlist_element_pk = playlist_element.pk
                 playlist_element.delete()
 
                 for elem in PlaylistElement.objects.filter(playlist=playlist):
                     if(elem.order > order):
                         elem.order = elem.order-1
                         elem.save()
-
                 async_to_sync(self.channel_layer.group_send)(
                     self.room_group_name,
                     {
                         'type': 'remove_playlist_element',
                         'message': 'remove',
                         'order': order,
-                        'pk': playlist_element.pk,
+                        'pk': playlist_element_pk,
                     }
                 )
 

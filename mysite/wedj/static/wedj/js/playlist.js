@@ -7,7 +7,7 @@ function startWs(playlistId) {
         var message = data['message'];
         var link = data['link'];
         var order = data['order'];
-
+        console.log(message, data['pk']);
         if(message == 'add') {
             $('#playlist-list').append('\
             <li class="list-group-item d-flex justify-content-between align-items-center" id="item'+data['pk']+'">\

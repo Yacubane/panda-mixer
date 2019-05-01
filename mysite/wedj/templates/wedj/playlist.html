@@ -44,7 +44,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" onclick="add_link()">Add</button>
+          <button id="submit-button" type="button" class="btn btn-primary" onclick="add_link()">Add</button>
         </div>
       </div>
     </div>
@@ -99,6 +99,12 @@
   <script>
     var playlistId = "{{playlist_id}}";
     startWs(playlistId);
+    $(document).keypress(function(e) {
+    if(e.which == 13) {
+        if($("#submit-button").is(":visible"))
+          $("#submit-button").click();
+    }
+    });
   </script>
 
 
