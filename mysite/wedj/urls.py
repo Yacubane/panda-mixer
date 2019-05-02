@@ -13,4 +13,6 @@ urlpatterns = [
     path('api/create_playlist/', views.create_playlist),
     path('', views.index, name='index'),
     path('p/<str:playlist_id>/', views.playlist, name='playlist'),
+    path('api/ytquery/<str:query>/', views.youtube_query),
+
 ]

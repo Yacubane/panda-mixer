@@ -9,6 +9,10 @@ from rest_framework.response import Response
 from .serializers import PlaylistSerializer
 import string, random
 
+import requests
+import json
+from django.http import JsonResponse
+
 @api_view(['GET'])
 def playlist_view(request):
     if request.method == 'GET':
@@ -42,3 +46,10 @@ def playlist(request, playlist_id):
     except Playlist.DoesNotExist:
         return render(request, 'wedj/404.html', context=None)
     return render(request, 'wedj/playlist.html', {'playlist_id': playlist_id})
+
+def youtube_query(request, query):
+    #  'https://www.googleapis.com/youtube/v3/search?maxResults=25&q=surfitg&key=[YOUR_API_KEY]' \
+
+    url = "https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=10&q="+query+"&key=AIzaSyAKkadTlzyGJd2h1Gz6x0AwruEJK2ebX0E"
+    response = json.loads(requests.get(url).text)
+    return JsonResponse(response)

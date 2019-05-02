@@ -15,18 +15,30 @@
   }
 }
 
-.card {
+#playlist-card {
   color: #000;
   width: 100%;
   height: 50vh;
   overflow-y: scroll;
   text-shadow: none;
 }
-.card-body {
+#playlist-card-body {
   width: 100%;
   height: 100%;
 }
 
+#add-playlist-youtube-query-box {
+  height: 50vh;
+  overflow-y: scroll;
+}
+
 .content{
   text-align: center;
+}
+.youtube-query-item-title {
+  text-decoration: none; 
+  text-overflow: ellipsis; 
+  display: block; 
+  overflow: hidden; 
+  white-space: nowrap;
 }
