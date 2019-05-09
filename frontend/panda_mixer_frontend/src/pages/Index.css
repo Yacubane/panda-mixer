@@ -1,0 +1,47 @@
+.Content {
+    text-align: center;
+}
+
+@media (min-width: 0em) {
+    .Content {
+        width: 100%;
+    }
+}
+
+@media (min-width: 42em) {
+    .Content {
+        width: 42em;
+    }
+}
+
+.Content-Header {
+    font-size: 2em;
+    font-weight: bold;
+    margin: 0.25em;
+    color:white;
+}
+.Content-Text {
+    font-size: 1.25em;
+    margin: 0.25em;
+    color:white;
+}
+.Content-Button {
+    height: 60px;
+    padding: 0 20px;
+    font-size: 18px;
+    border-radius: 40px;
+
+    margin: 0.25em;
+    background-color: #FF0000;
+    border-color: #EE0000;
+}
+.Content-Button:hover {
+    size: small;
+    background-color: #DD0000;
+    border-color: #DD0000;
+}
+.Content-Button:focus {
+    size: small;
+    background-color: #DD0000;
+    border-color: #DD0000;
+}
