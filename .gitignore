@@ -1,1 +1,3 @@
 frontend/panda_mixer_frontend/node_modules
+backend/mysite/db.sqlite3
+backend/mysite/wedj/__pycache__
