@@ -26,7 +26,7 @@ class RegisterBox extends Component {
                 "Content-type": "application/json; charset=UTF-8"
             },
             body: JSON.stringify({ username: username, password: password, email: email })
-        }).then((response) => {
+        }).then(function (response) {
             status = response.status;
             return response.json();
         }
