@@ -35,6 +35,9 @@ from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+from rest_framework import mixins
+from rest_framework import status
+from django.db.models import Max
 
 
 def send_channel_message(group_name, message):
@@ -91,9 +94,29 @@ class PlaylistsView(APIView):
         return Response({'link_id': id}, status=status.HTTP_201_CREATED)
 
 
-class PlaylistElementsView(generics.ListCreateAPIView):
+class PlaylistElementsView(generics.GenericAPIView):
     permission_classes = (AllowAny,)
     serializer_class = PlaylistElementSerializer
+
+    def get(self, request, link_id, format=None):
+        playlist = Playlist.objects.get(link_id=link_id)
+        playlistElements = PlaylistElement.objects.filter(playlist=playlist)
+        serializer = PlaylistElementSerializer(playlistElements, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, link_id, format=None):
+        playlist = Playlist.objects.get(link_id=link_id)
+
+        next_order = PlaylistElement.objects.filter(
+            playlist=playlist).aggregate(Max('order'))['order__max']
+        if next_order == None:
+            next_order = -1
+        data = json.loads(request.body)
+        PlaylistElement.objects.create(
+            playlist=playlist,
+            data=data['data'],
+            order=next_order+1)
+        return Response(status=status.HTTP_201_CREATED)
 
     def get_queryset(self):
         playlist = Playlist.objects.get(link_id=self.kwargs['link_id'])
