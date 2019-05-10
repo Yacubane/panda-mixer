@@ -39,7 +39,7 @@ export default class Playlist extends Component {
         "Content-type": "application/json; charset=UTF-8"
       },
       body: JSON.stringify({ data: this.state.inputValue })
-    }).then(function (response) {
+    }).then((response) => {
       console.log(response);
       status = response.status;
       if (status == 201) {
