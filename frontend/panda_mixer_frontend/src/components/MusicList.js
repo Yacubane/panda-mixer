@@ -69,6 +69,27 @@ export default class MusicList extends Component {
             }
             )
     }
+    handleMoveClick = (up, item) => {
+        fetch('http://127.0.0.1:8000/api/playlists/' + this.props.playlistId + "/elements/" + item.order + "/", {
+            method: 'PATCH',
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            },
+            body: JSON.stringify({ order: item.order + (up ? -1 : 1) }),
+
+        }).then(function (response) {
+            console.log(response);
+            return response.json();
+        }
+        )
+            .then((data) => {
+
+            })
+            .catch((err) => {
+                console.log(err)
+            }
+            )
+    }
     render() {
 
 
@@ -84,6 +105,12 @@ export default class MusicList extends Component {
                                 <div style={{ width: "100%" }}>
                                     <p className="Left-Item">{item.data}</p>
                                     <p className="Right-Item" >
+                                        <Button style={{ width: "5em" }} type="primary" htmlType="submit" onClick={() => this.handleMoveClick(true, item)}>
+                                            Up
+                                         </Button>
+                                        <Button style={{ width: "5em" }} type="primary" htmlType="submit" onClick={() => this.handleMoveClick(false, item)}>
+                                            Down
+                                         </Button>
                                         <Button style={{ width: "5em" }} type="primary" htmlType="submit" onClick={() => this.handleDeleteClick(item)}>
                                             Delete
                                          </Button>
