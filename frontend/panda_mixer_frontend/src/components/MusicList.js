@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import 'antd/dist/antd.css';
 import { List, Button } from 'antd';
-import './MusicList.css';
+import styles from './MusicList.module.scss';
 
 export default class MusicList extends Component {
     constructor(props) {
@@ -94,17 +94,17 @@ export default class MusicList extends Component {
 
 
         return (
-            <div className="Container">
+            <div className={styles.container}>
                 <div style={{ width: "100%" }}>
                     <List
-                        className="List"
+                        className={styles.list}
                         itemLayout="horizontal"
                         dataSource={this.state.data}
                         renderItem={item => (
                             <List.Item>
                                 <div style={{ width: "100%" }}>
-                                    <p className="Left-Item">{item.data}</p>
-                                    <p className="Right-Item" >
+                                    <p className={styles.leftItem}>{item.data}</p>
+                                    <p className={styles.rightItem} >
                                         <Button style={{ width: "5em" }} type="primary" htmlType="submit" onClick={() => this.handleMoveClick(true, item)}>
                                             Up
                                          </Button>

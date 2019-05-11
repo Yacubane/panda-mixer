@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import 'antd/dist/antd.css';
-import './Playlist.css';
+import styles from './Playlist.module.scss';
 
 import { Button, Modal, Input, List } from 'antd';
 
@@ -37,7 +37,7 @@ export default class Playlist extends Component {
     this.handleYoutubeQueryUpdate();
   }
 
-  handleAddToPlaylistClick = () => {
+  handleAddToPlaylistClick = (link) => {
     let status;
     fetch('http://127.0.0.1:8000/api/playlists/' + this.props.match.params.id + "/elements/", {
       method: 'POST',
@@ -45,7 +45,7 @@ export default class Playlist extends Component {
         "Accept": "application/json",
         "Content-type": "application/json; charset=UTF-8"
       },
-      body: JSON.stringify({ data: this.state.inputValue })
+      body: JSON.stringify({ data: link })
     }).then((response) => {
       console.log(response);
       status = response.status;
@@ -111,14 +111,14 @@ export default class Playlist extends Component {
 
   render() {
     return (
-      <SiteLayout>
+      <SiteLayout className={styles.root}>
         <Modal
           title="Vertically centered modal dialog"
           centered
           visible={this.state.modalVisible}
           onOk={() => this.setModalVisible(false)}
           onCancel={() => this.setModalVisible(false)}
-          style={{width: "100px"}}
+          width="50em" 
         >
 
           Enter YouTube link:
@@ -127,41 +127,44 @@ export default class Playlist extends Component {
             <Button
               style={{ width: "5em" }}
               type="primary"
-              onClick={this.handleAddToPlaylistClick.bind(this)}
+              onClick={() => this.handleAddToPlaylistClick(this.state.inputValue)}
             > Add </Button>
           </div>
 
           Or search in YouTube:
           <Input placeholder="Basic usage2" onChange={this.updateInputValue2} />
 
-          <div style={{ height: "10em", overflow: "auto" }}>
-            <p>some contents...</p>
+          <div style={{ height: "25em", overflow: "auto" }}>
             <List
               className="List"
               itemLayout="horizontal"
               dataSource={this.state.youtubeQueryData}
               renderItem={item => (
                 <List.Item>
-                  <div style={{display: 'flex', width: "100%"}}>
-                    <div style={{flex: '0 0 30%',}}>
+                  <div style={{ display: 'flex', width: "100%" }}>
+                    <div style={{ flex: '0 0 30%', }}>
                       <div style={{ display: 'flex', 'align-items': 'center', height: '100%' }}>
-                      <img src={item.thumbnailUrl} alt="" width="100%" />
-                    </div>
-                  </div>
-                  <div style={{flex: '0 0 70%', overflow:'hidden', border: '1px solid #0000001a', padding: '0.25em'}}>
-                    <div style={{width:'100%', height:'100%', display: 'flex', 'flex-direction': 'column',}}>
-                      <h5> {item.title} </h5>
-                      <div style={{'margin-top': 'auto'}}>
-                        <a href="#" class="btn btn-primary mr-2">Play</a>
-                        <a href="#" class="btn btn-primary" onclick="add_link_from(\''+ id + '\')">Add</a>
+                        <img src={item.thumbnailUrl} alt="" width="100%" />
                       </div>
                     </div>
-                  </div>
-                  <div class="w-100"></div>
+                    <div style={{ flex: '0 0 70%', overflow: 'hidden', border: '1px solid #0000001a', padding: '0.25em' }}>
+                      <div style={{ width: '100%', height: '100%', display: 'flex', 'flex-direction': 'column', }}>
+                        <h5> {item.title} </h5>
+                        <div style={{ 'margin-top': 'auto' }}>
+                          <Button style={{ width: "5em" }} type="primary" htmlType="submit" onClick={() => this.handleAddToPlaylistClick(item.id)}>
+                            Add
+                          </Button>
+                          <Button style={{ width: "5em" }} type="primary" htmlType="submit" onClick={() => this.handleDeleteClick(item)}>
+                            Play
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="w-100"></div>
                   </div>
                 </List.Item>
-          )}
-        />
+              )}
+            />
           </div>
         </Modal>
         <CenterBox>
