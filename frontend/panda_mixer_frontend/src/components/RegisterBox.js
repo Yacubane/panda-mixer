@@ -3,7 +3,7 @@ import {
     Form, Icon, Input, Button,
 } from 'antd';
 import 'antd/dist/antd.css';
-import './RegisterBox.css';
+import styles from './RegisterBox.module.scss';
 
 class RegisterBox extends Component {
     state = {
@@ -110,7 +110,7 @@ class RegisterBox extends Component {
         };
         const { getFieldDecorator } = this.props.form;
         return (
-            <Form className="Login-Form" {...formItemLayout} onSubmit={this.handleSubmit} >
+            <Form className={styles.loginForm} {...formItemLayout} onSubmit={this.handleSubmit} >
                 <Form.Item className="Hint" label="Email">
                     {getFieldDecorator('email', {
                         rules: [{ required: true, message: 'Please input your email!' }],
@@ -141,7 +141,7 @@ class RegisterBox extends Component {
                     )}
                 </Form.Item>
                 <Form.Item {...tailFormItemLayout}>
-                    <Button type="primary" htmlType="submit" className="login-form-button" loading={this.state.loading}>
+                    <Button type="primary" htmlType="submit" className={styles.loginFormButton} loading={this.state.loading}>
                         Register
                     </Button>
                 </Form.Item>
