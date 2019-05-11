@@ -57,7 +57,9 @@ export default class MusicList extends Component {
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
             },
-        }).then(function (response) {
+        }).then((response) => {
+            if (response.status == 204)
+                this.update();
             return response.json();
         }
         )
@@ -77,13 +79,14 @@ export default class MusicList extends Component {
             },
             body: JSON.stringify({ order: item.order + (up ? -1 : 1) }),
 
-        }).then(function (response) {
+        }).then((response) => {
             console.log(response);
+            if (response.status == 200)
+                this.update();
             return response.json();
         }
         )
             .then((data) => {
-
             })
             .catch((err) => {
                 console.log(err)
@@ -102,7 +105,7 @@ export default class MusicList extends Component {
                         dataSource={this.state.data}
                         renderItem={item => (
                             <List.Item>
-                                <div style={{ width: "100%", display: 'flex'}}>
+                                <div style={{ width: "100%", display: 'flex' }}>
                                     <p className={styles.leftItem}>{item.data}</p>
                                     <p className={styles.rightItem} >
                                         <Button style={{ width: "5em" }} type="primary" htmlType="submit" onClick={() => this.handleMoveClick(true, item)}>

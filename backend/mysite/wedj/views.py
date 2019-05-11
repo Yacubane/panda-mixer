@@ -178,10 +178,13 @@ class PlaylistElementDetailView(mixins.RetrieveModelMixin,
         playlist_element = PlaylistElement.objects.get(playlist=playlist, order=order)
         playlist_element.delete()
 
-        for elem in PlaylistElement.objects.filter(playlist=playlist):
-            if(elem.order > order):
-                elem.order = elem.order-1
-                elem.save()
+        max_order = PlaylistElement.objects.filter(
+            playlist=playlist).aggregate(Max('order'))['order__max']
+
+        for i in range(order+1, max_order+1):
+            elem = PlaylistElement.objects.get(playlist=playlist, order=i)
+            elem.order = elem.order-1
+            elem.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
     
