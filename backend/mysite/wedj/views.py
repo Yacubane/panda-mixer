@@ -53,7 +53,6 @@ def send_channel_message(group_name, message):
 
 def test(request):
     send_channel_message("chat_YUnV6w", "ttt3")
-    print("elo")
     return render(request, 'wedj/404.html', context=None)
 
 
@@ -158,17 +157,14 @@ class PlaylistElementDetailView(mixins.RetrieveModelMixin,
 
         playlist_element.order = max_order+1
         playlist_element.save()
-        print("Order0: ", order+1, " Order2 ", new_order+1)
 
         if(new_order < order):
             for i in range(order-1, new_order-1, -1):
                 elem = PlaylistElement.objects.get(playlist=playlist, order=i)
-                print("Order1: ", order+1, " Order2 ", new_order+1, " I: ", i)
                 elem.order = i+1
                 elem.save()
         else:
             for i in range(order+1, new_order+1):
-                print("Order2: ", order+1, " Order2 ", new_order+1, " I: ", i)
                 elem = PlaylistElement.objects.get(playlist=playlist, order=i)
                 elem.order = i-1
                 elem.save()
