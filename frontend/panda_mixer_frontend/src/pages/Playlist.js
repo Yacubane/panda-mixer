@@ -8,6 +8,7 @@ import { Button, Modal, Input, List } from 'antd';
 import SiteLayout from '../components/SiteLayout';
 import CenterBox from '../components/CenterBox';
 import MusicList from '../components/MusicList';
+import YouTubePlayer from '../components/YouTubePlayer';
 
 export default class Playlist extends Component {
   constructor(props) {
@@ -118,7 +119,7 @@ export default class Playlist extends Component {
           visible={this.state.modalVisible}
           onOk={() => this.setModalVisible(false)}
           onCancel={() => this.setModalVisible(false)}
-          width="50em" 
+          width="50em"
         >
 
           Enter YouTube link:
@@ -171,9 +172,14 @@ export default class Playlist extends Component {
           <div>
             <MusicList playlistId={this.props.match.params.id} />
             <br />
-            <Button style={{ width: "50%" }} type="primary" htmlType="submit" onClick={this.handleAddClick.bind(this)}>
-              Add
-          </Button>
+            <div>
+              <Button style={{ width: "50%" }} type="primary" htmlType="submit" onClick={this.handleAddClick.bind(this)}>
+                Add
+              </Button>
+            </div>
+              {/* <div>       
+            <YouTubePlayer YTid={''} />
+            </div> */}
           </div>
         </CenterBox>
       </SiteLayout >

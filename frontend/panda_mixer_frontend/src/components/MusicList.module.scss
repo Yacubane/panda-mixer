@@ -6,6 +6,9 @@
     :global(.ant-list-item) {
         border-bottom: 1px solid #e8e8e844;
     }
+    :global(.ant-empty-description) {
+        color: white;
+    }
 }
 
 .container {
