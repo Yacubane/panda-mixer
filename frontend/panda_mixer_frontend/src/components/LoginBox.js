@@ -4,7 +4,7 @@ import {
 } from 'antd';
 import { NavLink } from 'react-router-dom';
 import 'antd/dist/antd.css';
-import './LoginBox.css';
+import styles from './LoginBox.module.scss';
 
 class LoginBox extends Component {
     handleSubmit = (e) => {
@@ -20,7 +20,7 @@ class LoginBox extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <Form onSubmit={this.handleSubmit} className="login-form">
+            <Form onSubmit={this.handleSubmit} className={styles.loginForm}>
                 <Form.Item>
                     {getFieldDecorator('username', {
                         rules: [{ required: true, message: 'Please input your username!' }],
@@ -36,10 +36,10 @@ class LoginBox extends Component {
                     )}
                 </Form.Item>
                 <Form.Item>
-                    <Button style={{ width: "100%" }} type="primary" htmlType="submit" className="login-form-button">
+                    <Button style={{ width: "100%" }} type="primary" htmlType="submit" className={styles.loginFormButton}>
                         Log in
                     </Button>
-                    <p className="Register-Now">Or <NavLink to="/register"> register now! </NavLink></p>
+                    <p className={styles.registerNow}>Or <NavLink to="/register"> register now! </NavLink></p>
                 </Form.Item>
             </Form>
         );

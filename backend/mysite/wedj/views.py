@@ -53,7 +53,6 @@ def send_channel_message(group_name, message):
 
 def test(request):
     send_channel_message("chat_YUnV6w", "ttt3")
-    print("elo")
     return render(request, 'wedj/404.html', context=None)
 
 
@@ -110,7 +109,7 @@ class PlaylistElementsView(generics.GenericAPIView):
         next_order = PlaylistElement.objects.filter(
             playlist=playlist).aggregate(Max('order'))['order__max']
         if next_order == None:
-            next_order = -1
+            next_order = 0
         data = json.loads(request.body)
         PlaylistElement.objects.create(
             playlist=playlist,
@@ -124,7 +123,8 @@ class PlaylistElementsView(generics.GenericAPIView):
         return queryset
 
 
-class PlaylistElementDetailView(generics.RetrieveUpdateDestroyAPIView):
+class PlaylistElementDetailView(mixins.RetrieveModelMixin,
+                    generics.GenericAPIView):
     permission_classes = (AllowAny,)
     serializer_class = PlaylistElementSerializer
     lookup_field = 'order'
@@ -133,6 +133,61 @@ class PlaylistElementDetailView(generics.RetrieveUpdateDestroyAPIView):
         playlist = Playlist.objects.get(link_id=self.kwargs['link_id'])
         queryset = PlaylistElement.objects.filter(playlist=playlist)
         return queryset
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def patch(self, request, link_id, order):
+        data = json.loads(request.body)
+        if 'order' not in data:
+            return Response(data="No order", status=status.HTTP_400_BAD_REQUEST)
+
+        new_order = data['order']
+        playlist = Playlist.objects.get(link_id=link_id)
+
+        playlist_element = PlaylistElement.objects.get(
+            playlist=playlist, order=order)
+
+        max_order = PlaylistElement.objects.filter(
+            playlist=playlist).aggregate(Max('order'))['order__max']
+
+        if new_order < 1 or new_order > max_order:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+        playlist_element.order = max_order+1
+        playlist_element.save()
+
+        if(new_order < order):
+            for i in range(order-1, new_order-1, -1):
+                elem = PlaylistElement.objects.get(playlist=playlist, order=i)
+                elem.order = i+1
+                elem.save()
+        else:
+            for i in range(order+1, new_order+1):
+                elem = PlaylistElement.objects.get(playlist=playlist, order=i)
+                elem.order = i-1
+                elem.save()
+
+        playlist_element.order = new_order
+        playlist_element.save()   
+        return Response(status=status.HTTP_200_OK)
+
+    def delete(self, request, link_id, order):
+        playlist = Playlist.objects.get(link_id=link_id)
+        playlist_element = PlaylistElement.objects.get(playlist=playlist, order=order)
+        playlist_element.delete()
+
+        max_order = PlaylistElement.objects.filter(
+            playlist=playlist).aggregate(Max('order'))['order__max']
+
+        for i in range(order+1, max_order+1):
+            elem = PlaylistElement.objects.get(playlist=playlist, order=i)
+            elem.order = elem.order-1
+            elem.save()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
 
 
 @api_view(['GET'])
