@@ -11,25 +11,34 @@ import MusicList from '../components/MusicList';
 import YouTubePlayer from '../components/YouTubePlayer';
 
 export default class Playlist extends Component {
+
+
   constructor(props) {
     super(props);
     this.state = {
       modalVisible: false,
     }
   }
+
+
   setModalVisible(modalVisible) {
     this.setState({ modalVisible });
   }
 
+
   handleAddClick() {
     this.setModalVisible(true);
   }
+
+
   updateInputValue = (evt) => {
     console.log(evt.target.value);
     this.setState({
       inputValue: evt.target.value
     });
   }
+
+
   updateInputValue2 = (evt) => {
     console.log(evt.target.value);
     this.setState({
@@ -38,7 +47,15 @@ export default class Playlist extends Component {
     this.handleYoutubeQueryUpdate();
   }
 
-  handleAddToPlaylistClick = (link) => {
+
+  handleAddToPlaylistClick = (id) => {
+
+    if (id === false) {
+
+      alert("Wrong link");
+      return;
+    }
+
     let status;
     fetch('http://127.0.0.1:8000/api/playlists/' + this.props.match.params.id + "/elements/", {
       method: 'POST',
@@ -46,7 +63,7 @@ export default class Playlist extends Component {
         "Accept": "application/json",
         "Content-type": "application/json; charset=UTF-8"
       },
-      body: JSON.stringify({ data: link })
+      body: JSON.stringify({ id: id })
     }).then((response) => {
       console.log(response);
       status = response.status;
@@ -54,17 +71,13 @@ export default class Playlist extends Component {
         this.setModalVisible(false);
       }
       return response.json();
-    }
-    )
-      .then((data) => {
+    }).then((data) => {
 
-
-      })
-      .catch((err) => {
+      }).catch((err) => {
         console.log(err)
-      }
-      )
+      })
   }
+
 
   handleYoutubeQueryUpdate = () => {
     let status;
@@ -110,6 +123,13 @@ export default class Playlist extends Component {
   }
 
 
+  get_link_id = (link) => {
+    let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+    let match = link.match(regExp);
+    return (match && match[7].length === 11)? match[7] : false;
+  }
+
+
   render() {
     return (
       <SiteLayout className={styles.root}>
@@ -126,9 +146,9 @@ export default class Playlist extends Component {
           <div>
             <Input value={this.state.inputValue} onChange={this.updateInputValue} placeholder="Basic usage" />
             <Button
-              style={{ width: "5em" }}
+              style={{ width: "5em",}}
               type="primary"
-              onClick={() => this.handleAddToPlaylistClick(this.state.inputValue)}
+              onClick={() => this.handleAddToPlaylistClick(this.get_link_id(this.state.inputValue))}
             > Add </Button>
           </div>
 
@@ -173,9 +193,12 @@ export default class Playlist extends Component {
             <MusicList playlistId={this.props.match.params.id} />
             <br />
             <div>
-              <Button style={{ width: "50%" }} type="primary" htmlType="submit" onClick={this.handleAddClick.bind(this)}>
+              <div style={{'text-align':'center',  }}>
+                <Button style={{ width: "50%", }} type="primary" htmlType="submit" onClick={this.handleAddClick.bind(this)}>
                 Add
-              </Button>
+                </Button>
+              </div>
+
             </div>
               {/* <div>       
             <YouTubePlayer YTid={''} />

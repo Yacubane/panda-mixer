@@ -14,7 +14,7 @@ class PlaylistSerializer(serializers.ModelSerializer):
 class PlaylistElementSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlaylistElement
-        fields = ('playlist', 'data', 'order')
+        fields = ('playlist', 'data', 'order', 'title')
 
 
 class UserSerializer(serializers.ModelSerializer):

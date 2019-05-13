@@ -1,6 +1,5 @@
 from django.shortcuts import render
 
-from django.http import HttpResponse
 from .models import Playlist
 from .models import User
 from .models import PlaylistElement
@@ -22,17 +21,8 @@ from django.http import JsonResponse
 from rest_framework import permissions
 from rest_framework import generics
 from rest_framework.views import APIView
-from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
-from django.http import Http404
+from rest_framework.decorators import api_view
 from rest_framework.permissions import AllowAny
-from rest_framework.status import (
-    HTTP_400_BAD_REQUEST,
-    HTTP_404_NOT_FOUND,
-    HTTP_200_OK
-)
-from django.contrib.auth import authenticate
-from rest_framework.authtoken.models import Token
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from rest_framework import mixins
@@ -111,10 +101,24 @@ class PlaylistElementsView(generics.GenericAPIView):
         if next_order == None:
             next_order = 0
         data = json.loads(request.body)
+
+        url = "https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=" \
+              + data['id'] + "&key=AIzaSyAKkadTlzyGJd2h1Gz6x0AwruEJK2ebX0E"
+
+        response = json.loads(requests.get(url).text)
+
+        try:
+            title = response['items'][0]['snippet']['title']
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
         PlaylistElement.objects.create(
             playlist=playlist,
-            data=data['data'],
-            order=next_order+1)
+            data=data['id'],
+            order=next_order + 1,
+            title=title,
+        )
+
         return Response(status=status.HTTP_201_CREATED)
 
     def get_queryset(self):
@@ -124,7 +128,7 @@ class PlaylistElementsView(generics.GenericAPIView):
 
 
 class PlaylistElementDetailView(mixins.RetrieveModelMixin,
-                    generics.GenericAPIView):
+                                generics.GenericAPIView):
     permission_classes = (AllowAny,)
     serializer_class = PlaylistElementSerializer
     lookup_field = 'order'
@@ -154,23 +158,22 @@ class PlaylistElementDetailView(mixins.RetrieveModelMixin,
         if new_order < 1 or new_order > max_order:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-
-        playlist_element.order = max_order+1
+        playlist_element.order = max_order + 1
         playlist_element.save()
 
-        if(new_order < order):
-            for i in range(order-1, new_order-1, -1):
+        if (new_order < order):
+            for i in range(order - 1, new_order - 1, -1):
                 elem = PlaylistElement.objects.get(playlist=playlist, order=i)
-                elem.order = i+1
+                elem.order = i + 1
                 elem.save()
         else:
-            for i in range(order+1, new_order+1):
+            for i in range(order + 1, new_order + 1):
                 elem = PlaylistElement.objects.get(playlist=playlist, order=i)
-                elem.order = i-1
+                elem.order = i - 1
                 elem.save()
 
         playlist_element.order = new_order
-        playlist_element.save()   
+        playlist_element.save()
         return Response(status=status.HTTP_200_OK)
 
     def delete(self, request, link_id, order):
@@ -181,13 +184,12 @@ class PlaylistElementDetailView(mixins.RetrieveModelMixin,
         max_order = PlaylistElement.objects.filter(
             playlist=playlist).aggregate(Max('order'))['order__max']
 
-        for i in range(order+1, max_order+1):
+        for i in range(order + 1, max_order + 1):
             elem = PlaylistElement.objects.get(playlist=playlist, order=i)
-            elem.order = elem.order-1
+            elem.order = elem.order - 1
             elem.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
 
 
 @api_view(['GET'])
@@ -232,6 +234,6 @@ def youtube_query(request, query):
     #  'https://www.googleapis.com/youtube/v3/search?maxResults=25&q=surfitg&key=[YOUR_API_KEY]' \
 
     url = "https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=10&q=" + \
-        query+"&key=AIzaSyAKkadTlzyGJd2h1Gz6x0AwruEJK2ebX0E"
+          query + "&key=AIzaSyAKkadTlzyGJd2h1Gz6x0AwruEJK2ebX0E"
     response = json.loads(requests.get(url).text)
     return JsonResponse(response)

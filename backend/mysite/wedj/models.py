@@ -20,7 +20,6 @@ def validate_playlist_types(sender, instance, **kwargs):
         raise ValidationError({
             "detail" : 'Playlist type is not one of the permitted values: {}'.format(valid_types)
         })
-            
 
 
 class Playlist(models.Model):
@@ -43,6 +42,7 @@ class PlaylistElement(models.Model):
     playlist = models.ForeignKey('Playlist', on_delete=models.CASCADE)
     data = models.CharField(max_length=200)
     order = models.IntegerField()
+    title = models.CharField(max_length=200, default='404 name not found')
 
     class Meta:
         unique_together = ('playlist', 'order',)
