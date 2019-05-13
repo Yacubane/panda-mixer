@@ -6,7 +6,7 @@ from django.conf import settings
 
 class User(AbstractUser):
     username = models.CharField('username', max_length=150, unique=True)
-    email = models.EmailField(('email_address'), unique=True)
+    email = models.EmailField('email_address', unique=True)
 
     USERNAME_FIELD = 'username'
     EMAIL_FIELD = 'email'
