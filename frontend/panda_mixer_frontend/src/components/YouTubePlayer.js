@@ -26,9 +26,14 @@ export default class YouTubePlayer extends Component {
         })
     }
 
+    playVideo = (id) => {
+        this.player.loadVideoById(id, 0, "large")
+        this.player.playVideo()
+    }
+
     onPlayerStateChange = (e) => {
-        if (typeof this.props.onStateChange === 'function') {
-            this.props.onStateChange(e)
+        if (typeof this.props.onPlayerStateChange === 'function') {
+            this.props.onPlayerStateChange(e)
         }
     }
 

@@ -50,7 +50,19 @@ export default class MusicList extends Component {
     componentWillUnmount() {
         clearInterval(this.interval);
     }
+    getVideoIDByOrder = (order) => {
+        try {
+            return this.state.data.filter(a=> a.order==order)[0]['data']
+        }
+        catch (error) {
+            console.error(error);
+        }
+        return false
+    }
 
+    handlePlayClick = (item) => {
+        this.props.onPlayClick(item.order, item.data)
+    }
     handleDeleteClick = (item) => {
         fetch('http://127.0.0.1:8000/api/playlists/' + this.props.playlistId + "/elements/" + item.order + "/", {
             method: 'delete',
@@ -110,13 +122,16 @@ export default class MusicList extends Component {
                                     <p className={styles.rightItem} >
                                         <Button style={{ width: "5em" }} type="primary" htmlType="submit" onClick={() => this.handleMoveClick(true, item)}>
                                             Up
-                                         </Button>
+                                        </Button>
                                         <Button style={{ width: "5em" }} type="primary" htmlType="submit" onClick={() => this.handleMoveClick(false, item)}>
                                             Down
-                                         </Button>
+                                        </Button>
                                         <Button style={{ width: "5em" }} type="primary" htmlType="submit" onClick={() => this.handleDeleteClick(item)}>
                                             Delete
-                                         </Button>
+                                        </Button>
+                                        <Button style={{ width: "5em" }} type="primary" htmlType="submit" onClick={() => this.handlePlayClick(item)}>
+                                            Play
+                                        </Button>
                                     </p>
                                 </div>
                             </List.Item>

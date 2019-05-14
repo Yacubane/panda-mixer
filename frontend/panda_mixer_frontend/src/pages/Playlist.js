@@ -18,6 +18,8 @@ export default class Playlist extends Component {
     this.state = {
       modalVisible: false,
     }
+    this.YTPlayer = React.createRef();
+    this.musicList = React.createRef();
   }
 
 
@@ -73,9 +75,9 @@ export default class Playlist extends Component {
       return response.json();
     }).then((data) => {
 
-      }).catch((err) => {
-        console.log(err)
-      })
+    }).catch((err) => {
+      console.log(err)
+    })
   }
 
 
@@ -126,7 +128,7 @@ export default class Playlist extends Component {
   get_link_id = (link) => {
     let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
     let match = link.match(regExp);
-    return (match && match[7].length === 11)? match[7] : false;
+    return (match && match[7].length === 11) ? match[7] : false;
   }
 
 
@@ -146,7 +148,7 @@ export default class Playlist extends Component {
           <div>
             <Input value={this.state.inputValue} onChange={this.updateInputValue} placeholder="Basic usage" />
             <Button
-              style={{ width: "5em",}}
+              style={{ width: "5em", }}
               type="primary"
               onClick={() => this.handleAddToPlaylistClick(this.get_link_id(this.state.inputValue))}
             > Add </Button>
@@ -190,19 +192,31 @@ export default class Playlist extends Component {
         </Modal>
         <CenterBox>
           <div>
-            <MusicList playlistId={this.props.match.params.id} />
+            <MusicList ref={this.musicList} playlistId={this.props.match.params.id} onPlayClick={(order, id) => { this.setState({ lastVideoOrder: order }); this.YTPlayer.current.playVideo(id) }} />
             <br />
             <div>
-              <div style={{'text-align':'center',  }}>
+              <div style={{ 'text-align': 'center', }}>
                 <Button style={{ width: "50%", }} type="primary" htmlType="submit" onClick={this.handleAddClick.bind(this)}>
-                Add
+                  Add
                 </Button>
               </div>
 
             </div>
-              {/* <div>       
-            <YouTubePlayer YTid={''} />
-            </div> */}
+            <div>
+              <YouTubePlayer ref={this.YTPlayer} YTid={''} onPlayerStateChange={(e) => {
+                if (e.data == 0) {
+                  this.setState({ lastVideoOrder: this.state.lastVideoOrder + 1 });
+                  let videoId = this.musicList.current.getVideoIDByOrder(this.state.lastVideoOrder)
+                  console.log(videoId)
+                  if (videoId === false) {
+                    this.setState({ lastVideoOrder: 0 });
+                  } else {
+                    this.YTPlayer.current.playVideo(videoId)
+                  }
+                }
+              }
+              } />
+            </div>
           </div>
         </CenterBox>
       </SiteLayout >
