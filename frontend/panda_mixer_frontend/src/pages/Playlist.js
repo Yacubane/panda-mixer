@@ -22,6 +22,9 @@ export default class Playlist extends Component {
     this.musicList = React.createRef();
   }
 
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
 
   setModalVisible(modalVisible) {
     this.setState({ modalVisible });
@@ -41,12 +44,14 @@ export default class Playlist extends Component {
   }
 
 
-  updateInputValue2 = (evt) => {
+  updateInputValueYT = (evt) => {
     console.log(evt.target.value);
     this.setState({
-      inputValue2: evt.target.value
+      inputValueYT: evt.target.value,
     });
-    this.handleYoutubeQueryUpdate();
+
+    clearInterval(this.interval);
+    this.interval = setTimeout(() => this.handleYoutubeQueryUpdate(), 1000);
   }
 
 
@@ -69,7 +74,7 @@ export default class Playlist extends Component {
     }).then((response) => {
       console.log(response);
       status = response.status;
-      if (status == 201) {
+      if (status === 201) {
         this.setModalVisible(false);
       }
       return response.json();
@@ -83,7 +88,7 @@ export default class Playlist extends Component {
 
   handleYoutubeQueryUpdate = () => {
     let status;
-    fetch('http://127.0.0.1:8000/api/ytquery/' + this.state.inputValue2 + "/", {
+    fetch('http://127.0.0.1:8000/api/ytquery/' + this.state.inputValueYT + "/", {
       method: 'GET',
       headers: {
         "Accept": "application/json",
@@ -92,7 +97,7 @@ export default class Playlist extends Component {
     }).then((response) => {
       console.log(response);
       status = response.status;
-      if (status == 201) {
+      if (status === 201) {
         this.setModalVisible(false);
       }
       return response.json();
@@ -155,7 +160,7 @@ export default class Playlist extends Component {
           </div>
 
           Or search in YouTube:
-          <Input placeholder="Basic usage2" onChange={this.updateInputValue2} />
+          <Input placeholder="Basic usage2" onChange={this.updateInputValueYT} />
 
           <div style={{ height: "25em", overflow: "auto" }}>
             <List
@@ -204,7 +209,7 @@ export default class Playlist extends Component {
             </div>
             <div>
               <YouTubePlayer ref={this.YTPlayer} YTid={''} onPlayerStateChange={(e) => {
-                if (e.data == 0) {
+                if (e.data === 0) {
                   this.setState({ lastVideoOrder: this.state.lastVideoOrder + 1 });
                   let videoId = this.musicList.current.getVideoIDByOrder(this.state.lastVideoOrder)
                   console.log(videoId)
