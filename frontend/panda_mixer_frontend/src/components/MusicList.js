@@ -36,10 +36,12 @@ export default class MusicList extends Component {
             'ws://127.0.0.1:8000/ws/playlist/' + this.props.playlistId + '/');
         this.websocket.onmessage = (e) => {
             var data = JSON.parse(e.data);
+            console.log(data.message)
+
             if (data.message == "ADD" ||
                 data.message == "UPDATE" ||
                 data.message == "DELETE") {
-                this.update.bind(this)
+                this.update()
             }
         };
         this.websocket.onclose = () => {

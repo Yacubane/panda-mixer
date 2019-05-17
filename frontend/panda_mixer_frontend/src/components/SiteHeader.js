@@ -58,7 +58,6 @@ class SiteHeader extends Component {
                     <Menu.Item style={{ float: 'right' }} key="3">
                         <NavLink to="/register"> Register </NavLink>
                     </Menu.Item>
-                    <Button onClick={onLoggedIn}>aaa</Button>
                 </Menu>
             </Header>
         );
