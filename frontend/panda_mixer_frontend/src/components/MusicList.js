@@ -13,7 +13,9 @@ export default class MusicList extends Component {
     }
 
 
-    update() {
+    update = () => {
+        console.log("Updating");
+
         let status;
         fetch('http://127.0.0.1:8000/api/playlists/' + this.props.playlistId + "/elements/", {
             method: 'GET',
@@ -33,6 +35,7 @@ export default class MusicList extends Component {
                     });
                     console.log("Success");
                 } else {
+                    console.log("Error");
 
                 }
             })
@@ -41,18 +44,39 @@ export default class MusicList extends Component {
             }
             )
     }
-    componentDidMount() {
-        console.log(this.state.data)
-        this.update()
 
-        this.interval = setInterval(this.update.bind(this), 1000);
+    startWebsocket = () => {
+        this.websocket = new WebSocket(
+            'ws://127.0.0.1:8000/ws/playlist/' + this.props.playlistId + '/');
+        this.websocket.onmessage = (e) => {
+            var data = JSON.parse(e.data);
+            if (data.message == "ADD" ||
+                data.message == "UPDATE" ||
+                data.message == "DELETE") {
+                this.update.bind(this)
+            }
+        };
+        this.websocket.onclose = () => {
+            console.log('Chat socket closed unexpectedly');
+            setTimeout(() => this.startWebsocket(), 1000);
+        };
+
+        this.websocket.onerror = (error) => {
+            console.log(error);
+        };
+    }
+
+    componentDidMount() {
+        this.update()
+        this.startWebsocket();
     }
     componentWillUnmount() {
-        clearInterval(this.interval);
+        this.websocket.onclose = function () { };
+        this.websocket.close();
     }
     getVideoIDByOrder = (order) => {
         try {
-            return this.state.data.filter(a=> a.order==order)[0]['data']
+            return this.state.data.filter(a => a.order == order)[0]['data']
         }
         catch (error) {
             console.error(error);

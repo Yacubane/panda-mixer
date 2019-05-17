@@ -23,7 +23,6 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('p/<str:playlist_id>/', views.playlist, name='playlist'),
     path('api/ytquery/<str:query>/', views.youtube_query),
-    path('api/test', views.test),
     path('api/token/', TokenObtainPairView.as_view()),
     path('api/refresh_token/', TokenRefreshView.as_view()),
 

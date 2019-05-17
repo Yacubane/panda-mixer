@@ -35,20 +35,11 @@ def send_channel_message(group_name, message):
     async_to_sync(channel_layer.group_send)(
         group_name,
         {
-            'type': 'test',
+            'type': 'update',
             'message': message,
         }
     )
 
-
-def test(request):
-    send_channel_message("chat_YUnV6w", "ttt3")
-    return render(request, 'wedj/404.html', context=None)
-
-
-# class PlaylistView(generics.ListCreateAPIView):
-#     queryset = Playlist.objects.all()
-#     serializer_class = PlaylistSerializer()
 
 class UsersView(generics.CreateAPIView):
     permission_classes = (permissions.AllowAny,)
@@ -119,6 +110,8 @@ class PlaylistElementsView(generics.GenericAPIView):
             title=title,
         )
 
+        # Notify users via websocket that playlist has been updated
+        send_channel_message("chat_"+link_id, "ADD")
         return Response(status=status.HTTP_201_CREATED)
 
     def get_queryset(self):
@@ -174,11 +167,15 @@ class PlaylistElementDetailView(mixins.RetrieveModelMixin,
 
         playlist_element.order = new_order
         playlist_element.save()
+
+        # Notify users via websocket that playlist has been updated
+        send_channel_message("chat_"+link_id, "PATCH")
         return Response(status=status.HTTP_200_OK)
 
     def delete(self, request, link_id, order):
         playlist = Playlist.objects.get(link_id=link_id)
-        playlist_element = PlaylistElement.objects.get(playlist=playlist, order=order)
+        playlist_element = PlaylistElement.objects.get(
+            playlist=playlist, order=order)
         playlist_element.delete()
 
         max_order = PlaylistElement.objects.filter(
@@ -189,6 +186,8 @@ class PlaylistElementDetailView(mixins.RetrieveModelMixin,
             elem.order = elem.order - 1
             elem.save()
 
+        # Notify users via websocket that playlist has been updated
+        send_channel_message("chat_"+link_id, "DELETE")
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

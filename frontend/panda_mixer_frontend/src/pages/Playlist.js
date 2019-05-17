@@ -22,6 +22,7 @@ export default class Playlist extends Component {
     this.musicList = React.createRef();
   }
 
+
   componentWillUnmount() {
     clearInterval(this.interval);
   }
