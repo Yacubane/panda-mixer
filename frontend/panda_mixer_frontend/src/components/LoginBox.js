@@ -1,20 +1,64 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import {
     Form, Icon, Input, Button, Checkbox,
 } from 'antd';
 import { NavLink } from 'react-router-dom';
 import 'antd/dist/antd.css';
 import styles from './LoginBox.module.scss';
+import login from '../reducers/Login';
 
+
+const mapStateToProps = (state) => {
+    return { loggedIn: state.login.loggedIn };
+};
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onLoggedIn: () => {
+            dispatch({ type: 'LOGGED_IN' })
+        },
+    }
+};
 class LoginBox extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                this.login(values.username, values.password);
             }
         });
     }
+
+
+    login = (username, password) => {
+        let status;
+        fetch('http://127.0.0.1:8000/api/token/', {
+            method: 'POST',
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            },
+            body: JSON.stringify({ username: username, password: password })
+        }).then((response) => {
+            status = response.status;
+            return response.json();
+        }
+        )
+            .then((data) => {
+                localStorage.setItem('JWT_ACCESS_TOKEN', data.access);
+                localStorage.setItem('JWT_REFRESH_TOKEN', data.refresh);
+                localStorage.setItem('JWT_TOKEN_GET_DATE', new Date())
+                this.props.onLoggedIn()
+                this.props.history.push('/')
+                console.log(data)
+            })
+            .catch((err) => {
+                console.log(err)
+            }
+            )
+    }
+
+
 
 
     render() {
@@ -46,4 +90,4 @@ class LoginBox extends Component {
     }
 }
 
-export default Form.create()(LoginBox);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Form.create()(LoginBox)))

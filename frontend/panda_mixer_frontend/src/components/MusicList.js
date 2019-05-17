@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import 'antd/dist/antd.css';
 import { List, Button } from 'antd';
 import styles from './MusicList.module.scss';
+import Auth from '../functions/Auth';
 
 export default class MusicList extends Component {
     constructor(props) {
@@ -9,40 +10,25 @@ export default class MusicList extends Component {
         this.state = {
             data: [],
         };
-
     }
-
 
     update = () => {
         console.log("Updating");
 
-        let status;
-        fetch('http://127.0.0.1:8000/api/playlists/' + this.props.playlistId + "/elements/", {
-            method: 'GET',
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            },
-        }).then(function (response) {
-            status = response.status;
-            return response.json();
-        }
-        )
-            .then((data) => {
-                if (status == 200) {
-                    data.sort((a, b) => a.order < b.order ? -1 : 1)
+        Auth.fetch('http://127.0.0.1:8000/api/playlists/' + this.props.playlistId + '/elements/',
+            'GET', null)
+            .then((response) => {
+                if (response.status == 200) {
+                    response.json.sort((a, b) => a.order < b.order ? -1 : 1)
                     this.setState({
-                        data: data,
+                        data: response.json,
                     });
-                    console.log("Success");
-                } else {
-                    console.log("Error");
-
                 }
-            })
-            .catch((err) => {
+            }).catch((err) => {
                 console.log(err)
-            }
-            )
+            })
+
+
     }
 
     startWebsocket = () => {

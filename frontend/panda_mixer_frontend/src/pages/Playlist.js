@@ -201,7 +201,7 @@ export default class Playlist extends Component {
             <MusicList ref={this.musicList} playlistId={this.props.match.params.id} onPlayClick={(order, id) => { this.setState({ lastVideoOrder: order }); this.YTPlayer.current.playVideo(id) }} />
             <br />
             <div>
-              <div style={{ 'text-align': 'center', }}>
+              <div style={{ 'textAlign': 'center', }}>
                 <Button style={{ width: "50%", }} type="primary" htmlType="submit" onClick={this.handleAddClick.bind(this)}>
                   Add
                 </Button>
