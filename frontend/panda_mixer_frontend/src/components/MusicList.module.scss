@@ -13,9 +13,12 @@
 
 .container {
     height: 50%;
-    min-height: 30em;
+    min-height: 15em;
+    overflow: auto;
+    max-height: 30em;
     display: flex;
     align-items: center;
+    margin: auto;
 }
 
 @media (min-width: 0em) {

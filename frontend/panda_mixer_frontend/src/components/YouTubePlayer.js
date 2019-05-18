@@ -16,8 +16,8 @@ export default class YouTubePlayer extends Component {
         }
         loadYT.then((YT) => {
             this.player = new YT.Player(this.youtubePlayerAnchor, {
-                height: this.props.height || 390,
-                width: this.props.width || 640,
+                height: this.props.height || "100%",
+                width: this.props.width || "100%",
                 videoId: this.props.YTid,
                 events: {
                     onStateChange: this.onPlayerStateChange
@@ -40,7 +40,7 @@ export default class YouTubePlayer extends Component {
     render() {
         return (
             <section className='youtubeComponent-wrapper'>
-                <div ref={(r) => { this.youtubePlayerAnchor = r }}></div>
+                <div style={{width:"320px", height:"180px", margin:"auto", display:"block"}} ref={(r) => { this.youtubePlayerAnchor = r }}></div>
             </section>
         )
     }

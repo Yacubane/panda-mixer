@@ -7,6 +7,7 @@ import 'antd/dist/antd.css';
 import './SiteHeader.css';
 import { Button } from 'antd/lib/radio';
 import { withRouter } from 'react-router-dom'
+import Auth from '../functions/Auth'
 
 const { Header, Content, Footer } = Layout;
 
@@ -20,19 +21,18 @@ const mapDispatchToProps = (dispatch) => {
         },
     }
 };
+
+
 class SiteHeader extends Component {
     constructor(props) {
         super(props);
     }
 
     handleClick = e => {
-        if (e.key == "2") {
-            console.log("dupa2")
-            if (this.props.loggedIn) {
-                this.props.onLoggedOut()
-            } else {
-                this.props.history.push("/login/")
-            }
+        if (e.key == "login") {
+            this.props.history.push("/login/")
+        } else if (e.key == "logout") {
+            Auth.logout()
         }
     };
 
@@ -49,24 +49,36 @@ class SiteHeader extends Component {
                     className="Menu"
                     onClick={this.handleClick}
                 >
-                    <Menu.Item style={{ float: 'left' }} key="1">
+                    <Menu.Item style={{ float: 'left' }} key="homepage">
                         <NavLink to="/"> PANDA Mixer </NavLink>
                     </Menu.Item>
-                    <Menu.Item style={{ float: 'right' }} key="2">
-                        {this.props.loggedIn ? "Log out" : "Login"}
+
+                    {!this.props.loggedIn && (
+                        <Menu.Item style={{ float: 'right' }} key="login">
+                            Login
+                        </Menu.Item>
+                    )}
+                    {this.props.loggedIn && (
+                        <Menu.Item style={{ float: 'right' }} key="logout">
+                            Logout
                     </Menu.Item>
-                    <Menu.Item style={{ float: 'right' }} key="3">
-                        <NavLink to="/register"> Register </NavLink>
-                    </Menu.Item>
-                    <Menu.Item style={{ float: 'right' }} key="4">
-                        <NavLink to="/playlists"> Your playlists </NavLink>
-                    </Menu.Item>
+                    )}
+                    {!this.props.loggedIn && (
+                        <Menu.Item style={{ float: 'right' }} key="3">
+                            <NavLink to="/register"> Register </NavLink>
+                        </Menu.Item>
+                    )}
+                    {this.props.loggedIn && (
+                        <Menu.Item style={{ float: 'right' }} key="4">
+                            <NavLink to="/playlists"> Your playlists </NavLink>
+                        </Menu.Item>
+                    )}
                 </Menu>
             </Header>
         );
     }
 
-}                    //this.props.loggedIn
+}
 
 
 

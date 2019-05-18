@@ -1,6 +1,10 @@
 import { store } from "../index";
 
 export default class Auth {
+    static logout = () => {
+        localStorage.removeItem('JWT_TOKEN_GET_DATE')
+        store.dispatch({ type: 'LOGGED_OUT' })
+    }
     static getUsername = () => {
         return localStorage.getItem('JWT_USERNAME')
     }

@@ -282,7 +282,7 @@ export default class Playlist extends Component {
           </div>
         </Modal>
         <CenterBox>
-          <div>
+          <div style={{"max-width" : "100%"}}>
             <div> {this.state.playlistData != null && this.state.playlistData['public_editable']} </div>
             <div>
               <Button
@@ -298,8 +298,9 @@ export default class Playlist extends Component {
                 {this.state.playlistData && !this.state.playlistData.publicVisible && "Unlock visible"}
               </Button>
             </div>
+            <div>
             <MusicList ref={this.musicList} playlistId={this.props.match.params.id} onPlayClick={(order, id) => { this.setState({ lastVideoOrder: order }); this.YTPlayer.current.playVideo(id) }} />
-            <br />
+            </div>
             <div>
               <div style={{ 'textAlign': 'center', }}>
                 <Button 

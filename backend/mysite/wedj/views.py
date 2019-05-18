@@ -63,7 +63,8 @@ class PlaylistDetailsView(generics.GenericAPIView):
         data = serializer.data
 
         # we want username as owner, not pk
-        data['owner'] = playlist.owner.username
+        if playlist.owner != None:
+            data['owner'] = playlist.owner.username
         return Response(data=data, status=status.HTTP_200_OK)
 
     def patch(self, request, link_id, format=None):
@@ -216,6 +217,8 @@ class PlaylistElementDetailView(mixins.RetrieveModelMixin,
 
         max_order = PlaylistElement.objects.filter(
             playlist=playlist).aggregate(Max('order'))['order__max']
+        if max_order == None:
+            max_order = 0
 
         for i in range(order + 1, max_order + 1):
             elem = PlaylistElement.objects.get(playlist=playlist, order=i)
