@@ -8,7 +8,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from .serializers import PlaylistSerializer
 from .serializers import UserSerializer, PlaylistElementSerializer
-from .permissions import PlaylistPermission
+from .permissions import PlaylistPermission, PlaylistElementsPermission, PlaylistElementPermission
 from .permissions import UserDetailPermission
 
 import string
@@ -54,11 +54,37 @@ class UserDetailsView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
 
 
-class PlaylistDetailsView(generics.RetrieveUpdateDestroyAPIView):
+class PlaylistDetailsView(generics.GenericAPIView):
     permission_classes = (PlaylistPermission,)
-    lookup_field = 'link_id'
-    queryset = Playlist.objects.all()
-    serializer_class = PlaylistSerializer
+
+    def get(self, request, link_id, format=None):
+        playlist = Playlist.objects.get(link_id=link_id)
+        serializer = PlaylistSerializer(playlist)
+        data = serializer.data
+
+        # we want username as owner, not pk
+        data['owner'] = playlist.owner.username
+        return Response(data=data, status=status.HTTP_200_OK)
+
+    def patch(self, request, link_id, format=None):
+        playlist = Playlist.objects.get(link_id=link_id)
+        self.check_object_permissions(self.request, playlist)
+
+        data = json.loads(request.body)
+        if 'public_editable' in data:
+            playlist.public_editable = data['public_editable']
+        if 'public_visible' in data:
+            playlist.public_visible = data['public_visible']
+
+        playlist.save()
+        send_channel_message("chat_"+link_id, "PERMISSIONS_CHANGE")
+        return Response(data={}, status=status.HTTP_200_OK)
+
+    def delete(self, request, link_id, format=None):
+        playlist = Playlist.objects.get(link_id=link_id)
+        self.check_object_permissions(self.request, playlist)
+        playlist.delete()
+        return Response(data={}, status=status.HTTP_200_OK)
 
 
 class PlaylistsView(APIView):
@@ -73,20 +99,28 @@ class PlaylistsView(APIView):
                                 type=request.data.get('type'))
         return Response({'link_id': id}, status=status.HTTP_201_CREATED)
 
+    def get(self, request, format=None):
+        if not request.user.is_authenticated:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        playlists = Playlist.objects.filter(owner=request.user)
+        serializer = PlaylistSerializer(playlists, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
 
 class PlaylistElementsView(generics.GenericAPIView):
-    permission_classes = (AllowAny,)
+    permission_classes = (PlaylistElementsPermission,)
     serializer_class = PlaylistElementSerializer
 
     def get(self, request, link_id, format=None):
         playlist = Playlist.objects.get(link_id=link_id)
+        self.check_object_permissions(self.request, playlist)
         playlistElements = PlaylistElement.objects.filter(playlist=playlist)
         serializer = PlaylistElementSerializer(playlistElements, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, link_id, format=None):
         playlist = Playlist.objects.get(link_id=link_id)
-
+        self.check_object_permissions(self.request, playlist)
         next_order = PlaylistElement.objects.filter(
             playlist=playlist).aggregate(Max('order'))['order__max']
         if next_order == None:
@@ -111,7 +145,7 @@ class PlaylistElementsView(generics.GenericAPIView):
         )
 
         # Notify users via websocket that playlist has been updated
-        send_channel_message("chat_"+link_id, "ADD")
+        send_channel_message("chat_"+link_id, "PLAYLIST_ADD")
         return Response(status=status.HTTP_201_CREATED)
 
     def get_queryset(self):
@@ -122,7 +156,7 @@ class PlaylistElementsView(generics.GenericAPIView):
 
 class PlaylistElementDetailView(mixins.RetrieveModelMixin,
                                 generics.GenericAPIView):
-    permission_classes = (AllowAny,)
+    permission_classes = (PlaylistElementPermission,)
     serializer_class = PlaylistElementSerializer
     lookup_field = 'order'
 
@@ -144,6 +178,7 @@ class PlaylistElementDetailView(mixins.RetrieveModelMixin,
 
         playlist_element = PlaylistElement.objects.get(
             playlist=playlist, order=order)
+        self.check_object_permissions(self.request, playlist_element)
 
         max_order = PlaylistElement.objects.filter(
             playlist=playlist).aggregate(Max('order'))['order__max']
@@ -169,13 +204,14 @@ class PlaylistElementDetailView(mixins.RetrieveModelMixin,
         playlist_element.save()
 
         # Notify users via websocket that playlist has been updated
-        send_channel_message("chat_"+link_id, "PATCH")
+        send_channel_message("chat_"+link_id, "PLAYLIST_PATCH")
         return Response(status=status.HTTP_200_OK)
 
     def delete(self, request, link_id, order):
         playlist = Playlist.objects.get(link_id=link_id)
         playlist_element = PlaylistElement.objects.get(
             playlist=playlist, order=order)
+        self.check_object_permissions(self.request, playlist_element)
         playlist_element.delete()
 
         max_order = PlaylistElement.objects.filter(
@@ -187,7 +223,7 @@ class PlaylistElementDetailView(mixins.RetrieveModelMixin,
             elem.save()
 
         # Notify users via websocket that playlist has been updated
-        send_channel_message("chat_"+link_id, "DELETE")
+        send_channel_message("chat_"+link_id, "PLAYLIST_DELETE")
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

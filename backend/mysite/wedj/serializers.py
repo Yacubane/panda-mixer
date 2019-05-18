@@ -8,7 +8,7 @@ UserModel = get_user_model()
 class PlaylistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Playlist
-        fields = ('owner', 'public_editable', 'public_visible', 'type')
+        fields = ('link_id', 'owner', 'public_editable', 'public_visible', 'type')
 
 
 class PlaylistElementSerializer(serializers.ModelSerializer):

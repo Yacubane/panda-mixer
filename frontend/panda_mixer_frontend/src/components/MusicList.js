@@ -13,8 +13,6 @@ export default class MusicList extends Component {
     }
 
     update = () => {
-        console.log("Updating");
-
         Auth.fetch('http://127.0.0.1:8000/api/playlists/' + this.props.playlistId + '/elements/',
             'GET', null)
             .then((response) => {
@@ -31,36 +29,12 @@ export default class MusicList extends Component {
 
     }
 
-    startWebsocket = () => {
-        this.websocket = new WebSocket(
-            'ws://127.0.0.1:8000/ws/playlist/' + this.props.playlistId + '/');
-        this.websocket.onmessage = (e) => {
-            var data = JSON.parse(e.data);
-            console.log(data.message)
 
-            if (data.message == "ADD" ||
-                data.message == "UPDATE" ||
-                data.message == "DELETE") {
-                this.update()
-            }
-        };
-        this.websocket.onclose = () => {
-            console.log('Chat socket closed unexpectedly');
-            setTimeout(() => this.startWebsocket(), 1000);
-        };
-
-        this.websocket.onerror = (error) => {
-            console.log(error);
-        };
-    }
 
     componentDidMount() {
         this.update()
-        this.startWebsocket();
     }
     componentWillUnmount() {
-        this.websocket.onclose = function () { };
-        this.websocket.close();
     }
     getVideoIDByOrder = (order) => {
         try {

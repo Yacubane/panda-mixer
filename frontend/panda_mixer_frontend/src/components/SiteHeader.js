@@ -28,7 +28,7 @@ class SiteHeader extends Component {
     handleClick = e => {
         if (e.key == "2") {
             console.log("dupa2")
-            if(this.props.loggedIn) {
+            if (this.props.loggedIn) {
                 this.props.onLoggedOut()
             } else {
                 this.props.history.push("/login/")
@@ -57,6 +57,9 @@ class SiteHeader extends Component {
                     </Menu.Item>
                     <Menu.Item style={{ float: 'right' }} key="3">
                         <NavLink to="/register"> Register </NavLink>
+                    </Menu.Item>
+                    <Menu.Item style={{ float: 'right' }} key="4">
+                        <NavLink to="/playlists"> Your playlists </NavLink>
                     </Menu.Item>
                 </Menu>
             </Header>

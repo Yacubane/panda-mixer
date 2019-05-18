@@ -48,6 +48,7 @@ class LoginBox extends Component {
                 localStorage.setItem('JWT_ACCESS_TOKEN', data.access);
                 localStorage.setItem('JWT_REFRESH_TOKEN', data.refresh);
                 localStorage.setItem('JWT_TOKEN_GET_DATE', new Date())
+                localStorage.setItem('JWT_USERNAME', username)
                 this.props.onLoggedIn()
                 this.props.history.push('/')
                 console.log(data)

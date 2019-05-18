@@ -9,6 +9,7 @@ import SiteLayout from '../components/SiteLayout';
 import CenterBox from '../components/CenterBox';
 import MusicList from '../components/MusicList';
 import YouTubePlayer from '../components/YouTubePlayer';
+import Auth from '../functions/Auth';
 
 export default class Playlist extends Component {
 
@@ -17,18 +18,52 @@ export default class Playlist extends Component {
     super(props);
     this.state = {
       modalVisible: false,
+      playlistData: null,
     }
     this.YTPlayer = React.createRef();
     this.musicList = React.createRef();
   }
 
+  startWebsocket = () => {
+    this.websocket = new WebSocket(
+        'ws://127.0.0.1:8000/ws/playlist/' + this.props.match.params.id + '/');
+    this.websocket.onmessage = (e) => {
+        var data = JSON.parse(e.data);
+        console.log(data.message)
+
+        if (data.message == "PLAYLIST_ADD" ||
+            data.message == "PLAYLIST_UPDATE" ||
+            data.message == "PLAYLIST_DELETE") {
+            this.musicList.current.update()
+        } else if(data.message == "PERMISSIONS_CHANGE") {
+            this.updatePlaylistInfo()
+        }
+    };
+    this.websocket.onclose = () => {
+        console.log('Chat socket closed unexpectedly');
+        setTimeout(() => this.startWebsocket(), 1000);
+    };
+
+    this.websocket.onerror = (error) => {
+        console.log(error);
+    };
+}
+
+
+  componentDidMount() {
+    this.updatePlaylistInfo();
+    this.startWebsocket();
+
+  }
 
   componentWillUnmount() {
     clearInterval(this.interval);
+    this.websocket.onclose = function () { };
+    this.websocket.close();
   }
 
   setModalVisible(modalVisible) {
-    this.setState({ modalVisible });
+    this.setState((prevState) => ({ ...prevState, modalVisible: modalVisible }));
   }
 
 
@@ -36,6 +71,55 @@ export default class Playlist extends Component {
     this.setModalVisible(true);
   }
 
+  updatePlaylistInfo = () => {
+    Auth.fetch('http://127.0.0.1:8000/api/playlists/' + this.props.match.params.id + '/', 'GET', null)
+      .then((response) => {
+        if (response.status == 200) {
+          this.setState(prevState => ({
+            ...prevState,
+            playlistData: {
+              publicEditable: response.json.public_editable,
+              publicVisible: response.json.public_visible,
+              owner: response.json.owner,
+              isOwner: Auth.isLoggedIn() && response.json.owner == Auth.getUsername()
+            }
+          }));
+        }
+      })
+      .catch((err) => {
+
+      })
+  }
+
+  updatePublicEditable = () => {
+    console.log("test " + this.state.publicEditable );
+    Auth.fetch('http://127.0.0.1:8000/api/playlists/' + this.props.match.params.id + '/', 'PATCH',
+      JSON.stringify({ public_editable: !this.state.playlistData.publicEditable }))
+      .then((response) => {
+        console.log(response.status)
+        if (response.status == 200) {
+
+        }
+      })
+      .catch((err) => {
+        console.log("Error")
+      })
+  }
+
+
+  updatePublicVisible = () => {
+    Auth.fetch('http://127.0.0.1:8000/api/playlists/' + this.props.match.params.id + '/', 'PATCH',
+      JSON.stringify({ public_visible: !this.state.playlistData.publicVisible }))
+      .then((response) => {
+        console.log(response.status)
+        if (response.status == 200) {
+
+        }
+      })
+      .catch((err) => {
+
+      })
+  }
 
   updateInputValue = (evt) => {
     console.log(evt.target.value);
@@ -131,6 +215,7 @@ export default class Playlist extends Component {
   }
 
 
+
   get_link_id = (link) => {
     let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
     let match = link.match(regExp);
@@ -198,11 +283,29 @@ export default class Playlist extends Component {
         </Modal>
         <CenterBox>
           <div>
+            <div> {this.state.playlistData != null && this.state.playlistData['public_editable']} </div>
+            <div>
+              <Button
+                onClick={this.updatePublicEditable}
+                disabled={this.state.playlistData && !this.state.playlistData.isOwner} style={{ width: "10em", }} type="primary" htmlType="submit">
+                {this.state.playlistData && this.state.playlistData.publicEditable && "Lock edit"}
+                {this.state.playlistData && !this.state.playlistData.publicEditable && "Unlock edit"}
+              </Button>
+              <Button
+                onClick={this.updatePublicVisible}
+                disabled={this.state.playlistData && !this.state.playlistData.isOwner} style={{ width: "10em", }} type="primary" htmlType="submit">
+                {this.state.playlistData && this.state.playlistData.publicVisible && "Lock visible"}
+                {this.state.playlistData && !this.state.playlistData.publicVisible && "Unlock visible"}
+              </Button>
+            </div>
             <MusicList ref={this.musicList} playlistId={this.props.match.params.id} onPlayClick={(order, id) => { this.setState({ lastVideoOrder: order }); this.YTPlayer.current.playVideo(id) }} />
             <br />
             <div>
               <div style={{ 'textAlign': 'center', }}>
-                <Button style={{ width: "50%", }} type="primary" htmlType="submit" onClick={this.handleAddClick.bind(this)}>
+                <Button 
+                style={{ width: "50%",
+                 visibility: (this.state.playlistData && (this.state.playlistData.publicEditable || this.state.playlistData.isOwner)) ? 'visible' : 'hidden'}}
+                  type="primary" htmlType="submit" onClick={this.handleAddClick.bind(this)}>
                   Add
                 </Button>
               </div>
