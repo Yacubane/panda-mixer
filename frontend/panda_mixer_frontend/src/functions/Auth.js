@@ -25,6 +25,8 @@ export default class Auth {
             }
             if (this.isLoggedIn()) {
                 headers['Authorization'] = "Bearer " + localStorage.getItem("JWT_ACCESS_TOKEN")
+            } else {
+                store.dispatch({ type: 'LOGGED_OUT' })
             }
             fetch(link, {
                 method: method,
@@ -39,8 +41,6 @@ export default class Auth {
                     if (status == 401 && data.code == "token_not_valid") {
                         store.dispatch({ type: 'LOGGED_OUT' })
                         localStorage.removeItem('JWT_TOKEN_GET_DATE')
-                        console.log("Err1")
-
                         reject({ status: status, token_error: true, error: true, is_json: true, json: data })
                     } else {
                         resolve({ status: status, token_error: false, error: false, is_json: true, json: data })
@@ -51,8 +51,6 @@ export default class Auth {
                         reject({ status: status, token_error: false, error: true, is_json: false })
                     else
                         reject({ status: -1, token_error: false, error: true, is_json: false })
-                    console.log("Err2 " + status)
-
 
                 }
                 )
