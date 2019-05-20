@@ -25,6 +25,11 @@
     color: black
 }
 
-.addButton > i {
-    font-weight: bold
+.addButton {
+    font-weight: bold;
 }
+
+.addButton > span {
+    font-weight: normal;
+}
+
