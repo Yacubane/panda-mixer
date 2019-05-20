@@ -36,12 +36,10 @@
     border-color: #EE0000;
 }
 .Content-Button:hover {
-    size: small;
     background-color: #DD0000;
     border-color: #DD0000;
 }
 .Content-Button:focus {
-    size: small;
     background-color: #DD0000;
     border-color: #DD0000;
 }

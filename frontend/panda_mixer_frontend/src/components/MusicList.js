@@ -104,18 +104,10 @@ export default class MusicList extends Component {
                                 <div style={{ width: "100%", display: 'flex' }}>
                                     <p className={styles.leftItem}>{item.title}</p>
                                     <p className={styles.rightItem} >
-                                        <Button style={{ width: "5em" }} type="primary" htmlType="submit" onClick={() => this.handleMoveClick(true, item)}>
-                                            Up
-                                        </Button>
-                                        <Button style={{ width: "5em" }} type="primary" htmlType="submit" onClick={() => this.handleMoveClick(false, item)}>
-                                            Down
-                                        </Button>
-                                        <Button style={{ width: "5em" }} type="primary" htmlType="submit" onClick={() => this.handleDeleteClick(item)}>
-                                            Delete
-                                        </Button>
-                                        <Button style={{ width: "5em" }} type="primary" htmlType="submit" onClick={() => this.handlePlayClick(item)}>
-                                            Play
-                                        </Button>
+                                        <Button className={styles.musicButton} icon="caret-up" shape="round" type="dashed" htmlType="submit" onClick={() => this.handleMoveClick(true, item)} />
+                                        <Button className={styles.musicButton} icon="caret-down" shape="round" type="dashed" htmlType="submit" onClick={() => this.handleMoveClick(false, item)} />
+                                        <Button className={styles.musicButton} icon="close" shape="round" type="dashed" htmlType="submit" onClick={() => this.handleDeleteClick(item)} />
+                                        <Button className={styles.musicButton} icon="caret-right" shape="round" type="dashed" htmlType="submit" onClick={() => this.handlePlayClick(item)} />
                                     </p>
                                 </div>
                             </List.Item>

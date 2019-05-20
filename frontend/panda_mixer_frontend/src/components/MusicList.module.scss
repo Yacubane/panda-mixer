@@ -53,3 +53,22 @@
     color: white;
 }
 
+.musicButton {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    border-color: white;
+    background-color: white;
+    color: black
+}
+
+.musicButton:hover {
+    border-color: black;
+    background-color: black;
+    color: white
+}
+
+.musicButton:focus {
+    border-color: white;
+    background-color: white;
+    color: black
+}
