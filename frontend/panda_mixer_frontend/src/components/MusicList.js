@@ -101,7 +101,7 @@ export default class MusicList extends Component {
                         dataSource={this.state.data}
                         renderItem={item => (
                             <List.Item>
-                                <div style={{ width: "100%", display: 'flex' }}>
+                                <div className={styles.itemContainer} style={{ width: "100%", display: 'flex' }}>
                                     <p className={styles.leftItem}>{item.title}</p>
                                     <p className={styles.rightItem} >
                                         <Button className={styles.musicButton} icon="caret-up" shape="round" type="dashed" htmlType="submit" onClick={() => this.handleMoveClick(true, item)} />
