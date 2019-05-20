@@ -284,16 +284,18 @@ export default class Playlist extends Component {
         <CenterBox>
           <div style={{"max-width" : "100%"}}>
             <div> {this.state.playlistData != null && this.state.playlistData['public_editable']} </div>
-            <div>
+            <div style={{ "text-align": "center" }}>
               <Button
                 onClick={this.updatePublicEditable}
-                disabled={this.state.playlistData && !this.state.playlistData.isOwner} style={{ width: "10em", }} type="primary" htmlType="submit">
+                disabled={this.state.playlistData && !this.state.playlistData.isOwner}
+                style={{ width: "10em", }} className={styles.basicButton} icon="edit" type="round" htmlType="submit">
                 {this.state.playlistData && this.state.playlistData.publicEditable && "Lock edit"}
                 {this.state.playlistData && !this.state.playlistData.publicEditable && "Unlock edit"}
               </Button>
               <Button
                 onClick={this.updatePublicVisible}
-                disabled={this.state.playlistData && !this.state.playlistData.isOwner} style={{ width: "10em", }} type="primary" htmlType="submit">
+                disabled={this.state.playlistData && !this.state.playlistData.isOwner}
+                style={{ width: "10em", }} className={styles.basicButton} icon="eye" type="round" htmlType="submit">
                 {this.state.playlistData && this.state.playlistData.publicVisible && "Lock visible"}
                 {this.state.playlistData && !this.state.playlistData.publicVisible && "Unlock visible"}
               </Button>
@@ -302,11 +304,11 @@ export default class Playlist extends Component {
             <MusicList ref={this.musicList} playlistId={this.props.match.params.id} onPlayClick={(order, id) => { this.setState({ lastVideoOrder: order }); this.YTPlayer.current.playVideo(id) }} />
             </div>
             <div>
-              <div style={{ 'textAlign': 'center', }}>
+              <div style={{ 'text-align': 'center', }}>
                 <Button 
-                style={{ width: "50%",
+                style={{ width: "50%", "font-weight": "bold",
                  visibility: (this.state.playlistData && (this.state.playlistData.publicEditable || this.state.playlistData.isOwner)) ? 'visible' : 'hidden'}}
-                  type="primary" htmlType="submit" onClick={this.handleAddClick.bind(this)}>
+                  className={styles.basicButton} icon="plus" type="round" htmlType="submit" onClick={this.handleAddClick.bind(this)}>
                   Add
                 </Button>
               </div>

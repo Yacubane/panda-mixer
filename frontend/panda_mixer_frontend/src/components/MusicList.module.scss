@@ -58,7 +58,10 @@
     margin-right: 0.5em;
     border-color: white;
     background-color: white;
-    color: black
+    color: black;
+    :global(.anticon){
+        display: flex;
+    }
 }
 
 .musicButton:hover {
@@ -71,10 +74,4 @@
     border-color: white;
     background-color: white;
     color: black
-}
-
-.musicButton {
-    :global(.anticon){
-        display: flex;
-    }
 }

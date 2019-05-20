@@ -3,3 +3,24 @@
         width:1000px;
     }
 }
+
+.basicButton {
+    width: 5em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    border-color: white;
+    background-color: white;
+    color: black;
+}
+
+.basicButton:hover {
+    border-color: black;
+    background-color: black;
+    color: white
+}
+
+.basicButton:focus {
+    border-color: white;
+    background-color: white;
+    color: black
+}
