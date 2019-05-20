@@ -26,28 +26,28 @@ export default class Playlist extends Component {
 
   startWebsocket = () => {
     this.websocket = new WebSocket(
-        'ws://127.0.0.1:8000/ws/playlist/' + this.props.match.params.id + '/');
+      'ws://127.0.0.1:8000/ws/playlist/' + this.props.match.params.id + '/');
     this.websocket.onmessage = (e) => {
-        var data = JSON.parse(e.data);
-        console.log(data.message)
+      var data = JSON.parse(e.data);
+      console.log(data.message)
 
-        if (data.message == "PLAYLIST_ADD" ||
-            data.message == "PLAYLIST_UPDATE" ||
-            data.message == "PLAYLIST_DELETE") {
-            this.musicList.current.update()
-        } else if(data.message == "PERMISSIONS_CHANGE") {
-            this.updatePlaylistInfo()
-        }
+      if (data.message == "PLAYLIST_ADD" ||
+        data.message == "PLAYLIST_UPDATE" ||
+        data.message == "PLAYLIST_DELETE") {
+        this.musicList.current.update()
+      } else if (data.message == "PERMISSIONS_CHANGE") {
+        this.updatePlaylistInfo()
+      }
     };
     this.websocket.onclose = () => {
-        console.log('Chat socket closed unexpectedly');
-        setTimeout(() => this.startWebsocket(), 1000);
+      console.log('Chat socket closed unexpectedly');
+      setTimeout(() => this.startWebsocket(), 1000);
     };
 
     this.websocket.onerror = (error) => {
-        console.log(error);
+      console.log(error);
     };
-}
+  }
 
 
   componentDidMount() {
@@ -92,7 +92,7 @@ export default class Playlist extends Component {
   }
 
   updatePublicEditable = () => {
-    console.log("test " + this.state.publicEditable );
+    console.log("test " + this.state.publicEditable);
     Auth.fetch('http://127.0.0.1:8000/api/playlists/' + this.props.match.params.id + '/', 'PATCH',
       JSON.stringify({ public_editable: !this.state.playlistData.publicEditable }))
       .then((response) => {
@@ -223,6 +223,20 @@ export default class Playlist extends Component {
   }
 
 
+  isVisibleOrOwner = () => {
+    return this.state.playlistData && (this.state.playlistData.publicVisible || this.state.playlistData.isOwner)
+  }
+  isntVisibleOrOwner = () => {
+    return this.state.playlistData && !(this.state.playlistData.publicVisible || this.state.playlistData.isOwner)
+  }
+
+  isEditableOrOwner = () => {
+    return this.state.playlistData && (this.state.playlistData.publicEditable || this.state.playlistData.isOwner)
+  }
+  isntEditableOrOwner = () => {
+    return this.state.playlistData && !(this.state.playlistData.publicEditable || this.state.playlistData.isOwner)
+  }
+
   render() {
     return (
       <SiteLayout className={styles.root}>
@@ -282,7 +296,7 @@ export default class Playlist extends Component {
           </div>
         </Modal>
         <CenterBox>
-          <div style={{"max-width" : "100%"}}>
+          <div style={{ "max-width": "100%" }}>
             <div> {this.state.playlistData != null && this.state.playlistData['public_editable']} </div>
             <div style={{ "text-align": "center" }}>
               <Button
@@ -301,33 +315,40 @@ export default class Playlist extends Component {
               </Button>
             </div>
             <div>
-            <MusicList ref={this.musicList} playlistId={this.props.match.params.id} onPlayClick={(order, id) => { this.setState({ lastVideoOrder: order }); this.YTPlayer.current.playVideo(id) }} />
+              {this.isVisibleOrOwner() &&
+                <MusicList ref={this.musicList} playlistId={this.props.match.params.id} onPlayClick={(order, id) => { this.setState({ lastVideoOrder: order }); this.YTPlayer.current.playVideo(id) }} />}
+              {this.isntVisibleOrOwner() &&
+                <p className={styles.hiddenPlaylistText}> This playlist isn't visible publicly.<br />Ask owner to unhide it! </p>}
             </div>
             <div>
               <div style={{ 'text-align': 'center', }}>
-                <Button 
-                style={{ width: "50%",
-                 visibility: (this.state.playlistData && (this.state.playlistData.publicEditable || this.state.playlistData.isOwner)) ? 'visible' : 'hidden'}}
-                  className={styles.basicButton + ' ' + styles.addButton} icon="plus" type="round" htmlType="submit" onClick={this.handleAddClick.bind(this)}>
-                  Add
+                {this.isEditableOrOwner() && this.isVisibleOrOwner() &&
+                  <Button
+                    style={{
+                      width: "50%",
+                    }}
+                    className={styles.basicButton + ' ' + styles.addButton} icon="plus" type="round" htmlType="submit" onClick={this.handleAddClick.bind(this)}>
+                    Add
                 </Button>
+                }
               </div>
 
             </div>
             <div>
-              <YouTubePlayer ref={this.YTPlayer} YTid={''} onPlayerStateChange={(e) => {
-                if (e.data === 0) {
-                  this.setState({ lastVideoOrder: this.state.lastVideoOrder + 1 });
-                  let videoId = this.musicList.current.getVideoIDByOrder(this.state.lastVideoOrder)
-                  console.log(videoId)
-                  if (videoId === false) {
-                    this.setState({ lastVideoOrder: 0 });
-                  } else {
-                    this.YTPlayer.current.playVideo(videoId)
+              {this.isVisibleOrOwner() &&
+                <YouTubePlayer ref={this.YTPlayer} YTid={''} onPlayerStateChange={(e) => {
+                  if (e.data === 0) {
+                    this.setState({ lastVideoOrder: this.state.lastVideoOrder + 1 });
+                    let videoId = this.musicList.current.getVideoIDByOrder(this.state.lastVideoOrder)
+                    console.log(videoId)
+                    if (videoId === false) {
+                      this.setState({ lastVideoOrder: 0 });
+                    } else {
+                      this.YTPlayer.current.playVideo(videoId)
+                    }
                   }
                 }
-              }
-              } />
+                } />}
             </div>
           </div>
         </CenterBox>
