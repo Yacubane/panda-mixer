@@ -72,3 +72,9 @@
     background-color: white;
     color: black
 }
+
+.musicButton {
+    :global(.anticon){
+        display: flex;
+    }
+}
