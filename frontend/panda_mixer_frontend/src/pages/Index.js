@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Button } from 'antd';
+import {Layout, Button, Icon} from 'antd';
 import 'antd/dist/antd.css';
 import './Index.css';
 import CenterBox from '../components/CenterBox';
@@ -36,7 +36,10 @@ export default class Index extends Component {
               Panda Mixer is an app, where you can make music playlist cooperatively on YouTube.
               Click to generate link and share it with friends!
               </p>
-            <Button className="Content-Button" type="primary" shape="round" onClick={this.handleClick}>Generate link (YouTube)</Button>
+            <Button className="Content-Button" type="primary" shape="round" onClick={this.handleClick}>
+              <Icon style={{ "font-size": "2em", "vertical-align": "middle" }} type="youtube" />
+              Generate link
+            </Button>
           </div>
         </CenterBox>
       </SiteLayout >

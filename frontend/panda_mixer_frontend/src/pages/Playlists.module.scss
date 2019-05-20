@@ -50,3 +50,21 @@
     color: white;
 }
 
+.basicButton {
+    margin-left: 0.5em;
+    border-color: transparent;
+    background-color: lightgrey;
+    color: black;
+}
+
+.basicButton:hover {
+    border-color: black;
+    background-color: black;
+    color: white
+}
+
+.basicButton:focus {
+    border-color: white;
+    background-color: white;
+    color: black
+}

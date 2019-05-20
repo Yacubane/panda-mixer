@@ -4,6 +4,7 @@ import {
 } from 'antd';
 import 'antd/dist/antd.css';
 import styles from './RegisterBox.module.scss';
+import buttonStyles from './LoginBox.module.scss';
 import { withRouter } from 'react-router-dom'
 
 class RegisterBox extends Component {
@@ -142,7 +143,7 @@ class RegisterBox extends Component {
                     )}
                 </Form.Item>
                 <Form.Item {...tailFormItemLayout}>
-                    <Button type="primary" htmlType="submit" className={styles.loginFormButton} loading={this.state.loading}>
+                    <Button type="primary" htmlType="submit" className={buttonStyles.loginButton} loading={this.state.loading}>
                         Register
                     </Button>
                 </Form.Item>

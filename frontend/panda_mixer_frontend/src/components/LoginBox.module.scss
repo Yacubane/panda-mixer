@@ -4,10 +4,25 @@
     }
 }
 
-.loginFormButton {
-    width: 100%;
-}
-
 .registerNow {
     color:white;
+}
+
+.loginButton {
+    width: 100%;
+    border-color: transparent;
+    background-color: red;
+    color: white;
+}
+
+.loginButton:hover {
+    border-color: black;
+    background-color: black;
+    color: white
+}
+
+.loginButton:focus {
+    border-color: white;
+    background-color: white;
+    color: black
 }

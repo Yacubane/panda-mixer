@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Menu } from 'antd';
-import { Layout } from 'antd';
+import { Layout, Icon } from 'antd';
 import { NavLink } from 'react-router-dom';
 import 'antd/dist/antd.css';
 import './SiteHeader.css';
@@ -50,22 +50,22 @@ class SiteHeader extends Component {
                     onClick={this.handleClick}
                 >
                     <Menu.Item style={{ float: 'left' }} key="homepage">
-                        <NavLink to="/"> PANDA Mixer </NavLink>
+                        <NavLink to="/"> <Icon type="home" />PANDA Mixer </NavLink>
                     </Menu.Item>
 
                     {!this.props.loggedIn && (
                         <Menu.Item style={{ float: 'right' }} key="login">
-                            Login
+                            <Icon type="login" /> Login
                         </Menu.Item>
                     )}
                     {this.props.loggedIn && (
                         <Menu.Item style={{ float: 'right' }} key="logout">
-                            Logout
+                            <Icon type="logout" /> Logout
                     </Menu.Item>
                     )}
                     {!this.props.loggedIn && (
                         <Menu.Item style={{ float: 'right' }} key="3">
-                            <NavLink to="/register"> Register </NavLink>
+                            <NavLink to="/register"> <Icon type="form" />Register </NavLink>
                         </Menu.Item>
                     )}
                     {this.props.loggedIn && (

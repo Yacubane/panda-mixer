@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom'
 import 'antd/dist/antd.css';
 import styles from './Playlists.module.scss';
 
-import { Button, Modal, Input, List } from 'antd';
+import {Button, Modal, Input, List, Icon} from 'antd';
 
 import SiteLayout from '../components/SiteLayout';
 import CenterBox from '../components/CenterBox';
@@ -78,11 +78,11 @@ class Playlists extends Component {
                       <div style={{ width: "100%", display: 'flex' }}>
                         <p className={styles.leftItem}>{item['link_id']}</p>
                         <p className={styles.rightItem} >
-                          <Button style={{ width: "5em" }} type="primary" htmlType="submit" onClick={() => this.handleOpenClick(item)}>
-                            Open
+                          <Button className={styles.basicButton} icon="caret-right" shape="round" type="primary" htmlType="submit" onClick={() => this.handleOpenClick(item)}>
+                            {/*Open*/}
                           </Button>
-                          <Button style={{ width: "5em" }} type="primary" htmlType="submit" onClick={() => this.handleDeleteClick(item)}>
-                            Delete
+                          <Button className={styles.basicButton} icon="delete" shape="round" type="primary" htmlType="submit" onClick={() => this.handleDeleteClick(item)}>
+                            {/*Delete*/}
                           </Button>
                         </p>
                       </div>

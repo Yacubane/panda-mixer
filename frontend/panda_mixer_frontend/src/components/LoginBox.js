@@ -81,10 +81,10 @@ class LoginBox extends Component {
                     )}
                 </Form.Item>
                 <Form.Item>
-                    <Button style={{ width: "100%" }} type="primary" htmlType="submit" className={styles.loginFormButton}>
+                    <Button style={{ width: "100%" }} type="primary" htmlType="submit" className={styles.loginButton}>
                         Log in
                     </Button>
-                    <p className={styles.registerNow}>Or <NavLink to="/register"> register now! </NavLink></p>
+                    <p className={styles.registerNow}>Or <NavLink to="/register" style={{ "color": "red" }}> register now! </NavLink></p>
                 </Form.Item>
             </Form>
         );
