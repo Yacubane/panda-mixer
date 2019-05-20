@@ -4,6 +4,7 @@ import {
 } from 'antd';
 import 'antd/dist/antd.css';
 import styles from './RegisterBox.module.scss';
+import { withRouter } from 'react-router-dom'
 
 class RegisterBox extends Component {
     state = {
@@ -33,8 +34,8 @@ class RegisterBox extends Component {
         )
             .then((data) => {
                 this.setState({ loading: false });
-                if (status == 200) {
-                    console.log("Success");
+                if (status == 201) {
+                    this.props.onRegister()
                 } else {
                     if (data.hasOwnProperty('email')) this.setFormError('email', data['email'])
                     if (data.hasOwnProperty('username')) this.setFormError('username', data['username'])
@@ -150,4 +151,4 @@ class RegisterBox extends Component {
     }
 }
 
-export default Form.create()(RegisterBox);
+export default withRouter(Form.create()(RegisterBox));
