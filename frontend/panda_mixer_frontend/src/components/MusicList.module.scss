@@ -2,7 +2,6 @@
     width: 100%;
     min-width: 50%;
     min-height: 15em;
-    max-height: 30em;
     overflow: auto;
     :global(.ant-list-item) {
         border-bottom: 1px solid #e8e8e844;
@@ -25,11 +24,19 @@
     .container {
         width: 100%;
     }
+    .list {
+        max-height: none;
+
+    }
 }
 
 @media (min-width: 42em) {
     .container {
         width: 42em;
+    }
+    .list {
+        max-height: 30em;
+
     }
 }
 
