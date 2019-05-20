@@ -306,9 +306,9 @@ export default class Playlist extends Component {
             <div>
               <div style={{ 'text-align': 'center', }}>
                 <Button 
-                style={{ width: "50%", "font-weight": "bold",
+                style={{ width: "50%",
                  visibility: (this.state.playlistData && (this.state.playlistData.publicEditable || this.state.playlistData.isOwner)) ? 'visible' : 'hidden'}}
-                  className={styles.basicButton} icon="plus" type="round" htmlType="submit" onClick={this.handleAddClick.bind(this)}>
+                  className={styles.basicButton + ' ' + styles.addButton} icon="plus" type="round" htmlType="submit" onClick={this.handleAddClick.bind(this)}>
                   Add
                 </Button>
               </div>
