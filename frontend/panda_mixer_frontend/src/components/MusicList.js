@@ -25,8 +25,6 @@ export default class MusicList extends Component {
             }).catch((err) => {
                 console.log(err)
             })
-
-
     }
 
 
