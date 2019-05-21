@@ -34,7 +34,8 @@ export default class Playlist extends Component {
       if (data.message == "PLAYLIST_ADD" ||
         data.message == "PLAYLIST_PATCH" ||
         data.message == "PLAYLIST_DELETE") {
-        this.musicList.current.update()
+        if (this.musicList.current != null)
+          this.musicList.current.update()
       } else if (data.message == "PERMISSIONS_CHANGE") {
         this.updatePlaylistInfo()
       }
