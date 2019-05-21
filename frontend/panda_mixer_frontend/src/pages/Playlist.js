@@ -299,20 +299,21 @@ export default class Playlist extends Component {
           <div style={{ "max-width": "100%" }}>
             <div> {this.state.playlistData != null && this.state.playlistData['public_editable']} </div>
             <div style={{ "text-align": "center" }}>
-              <Button
-                onClick={this.updatePublicEditable}
-                disabled={this.state.playlistData && !this.state.playlistData.isOwner}
-                style={{ width: "10em", }} className={styles.basicButton} icon="edit" type="round" htmlType="submit">
-                {this.state.playlistData && this.state.playlistData.publicEditable && "Lock edit"}
-                {this.state.playlistData && !this.state.playlistData.publicEditable && "Unlock edit"}
-              </Button>
-              <Button
-                onClick={this.updatePublicVisible}
-                disabled={this.state.playlistData && !this.state.playlistData.isOwner}
-                style={{ width: "10em", }} className={styles.basicButton} icon="eye" type="round" htmlType="submit">
-                {this.state.playlistData && this.state.playlistData.publicVisible && "Lock visible"}
-                {this.state.playlistData && !this.state.playlistData.publicVisible && "Unlock visible"}
-              </Button>
+              {this.state.playlistData && this.state.playlistData.isOwner &&
+                <Button
+                  onClick={this.updatePublicEditable}
+                  style={{ width: "10em", }} className={styles.basicButton} icon="edit" type="round" htmlType="submit">
+                  {this.state.playlistData && this.state.playlistData.publicEditable && "Lock edit"}
+                  {this.state.playlistData && !this.state.playlistData.publicEditable && "Unlock edit"}
+                </Button>}
+
+              {this.state.playlistData && this.state.playlistData.isOwner &&
+                <Button
+                  onClick={this.updatePublicVisible}
+                  style={{ width: "10em", }} className={styles.basicButton} icon="eye" type="round" htmlType="submit">
+                  {this.state.playlistData && this.state.playlistData.publicVisible && "Lock visible"}
+                  {this.state.playlistData && !this.state.playlistData.publicVisible && "Unlock visible"}
+                </Button>}
             </div>
             <div>
               {this.isVisibleOrOwner() &&
