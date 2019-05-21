@@ -10,8 +10,9 @@ import CenterBox from '../components/CenterBox';
 import MusicList from '../components/MusicList';
 import YouTubePlayer from '../components/YouTubePlayer';
 import Auth from '../functions/Auth';
+import { withRouter } from 'react-router-dom'
 
-export default class Playlist extends Component {
+class Playlist extends Component {
 
 
   constructor(props) {
@@ -85,10 +86,12 @@ export default class Playlist extends Component {
               isOwner: Auth.isLoggedIn() && response.json.owner == Auth.getUsername()
             }
           }));
+        } else {
+          throw null
         }
       })
       .catch((err) => {
-
+        this.props.history.push('/404')
       })
   }
 
@@ -249,7 +252,7 @@ export default class Playlist extends Component {
         >
 
           Enter YouTube link:
-          <div style={{ "display": "flex", margin: "0.25em"}}>
+          <div style={{ "display": "flex", margin: "0.25em" }}>
             <Input value={this.state.inputValue} onChange={this.updateInputValue} placeholder="Type YouTube link" />
             <Button
               style={{ width: "5em", }}
@@ -259,7 +262,7 @@ export default class Playlist extends Component {
           </div>
 
           Or search in YouTube:
-          <div style={{ "display": "flex", margin: "0.25em"}}>
+          <div style={{ "display": "flex", margin: "0.25em" }}>
             <Input value={this.state.inputValueYT} onChange={this.updateInputValueYT} placeholder="Search in YouTube" />
             <Button
               style={{ width: "5em", }}
@@ -363,3 +366,4 @@ export default class Playlist extends Component {
 
 }
 
+export default withRouter(Playlist)

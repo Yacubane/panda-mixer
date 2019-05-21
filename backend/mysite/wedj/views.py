@@ -85,6 +85,7 @@ class PlaylistDetailsView(generics.GenericAPIView):
         playlist = Playlist.objects.get(link_id=link_id)
         self.check_object_permissions(self.request, playlist)
         playlist.delete()
+        send_channel_message("chat_"+link_id, "PERMISSIONS_CHANGE")
         return Response(data={}, status=status.HTTP_200_OK)
 
 

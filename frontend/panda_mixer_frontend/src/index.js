@@ -10,6 +10,7 @@ import Login from './pages/Login';
 import Playlist from './pages/Playlist';
 import Register from './pages/Register';
 import Playlists from './pages/Playlists';
+import NotFound from './pages/NotFound';
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import rootReducer from './reducers'
@@ -25,6 +26,7 @@ ReactDOM.render(
                 <Route exact path='/register' component={Register} />
                 <Route exact path='/p/:id' component={Playlist} />
                 <Route exact path='/playlists' component={Playlists} />
+                <Route exact path='/404' component={NotFound} />
 
                 {/* <Route path='/users' component={App} />  */}
 
