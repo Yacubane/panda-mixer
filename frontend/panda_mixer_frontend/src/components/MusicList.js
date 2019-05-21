@@ -48,46 +48,24 @@ export default class MusicList extends Component {
         this.props.onPlayClick(item.order, item.data)
     }
     handleDeleteClick = (item) => {
-        fetch('http://127.0.0.1:8000/api/playlists/' + this.props.playlistId + "/elements/" + item.order + "/", {
-            method: 'delete',
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            },
-        }).then((response) => {
-            if (response.status == 204)
-                this.update();
-            return response.json();
-        }
-        )
-            .then((data) => {
-
-            })
-            .catch((err) => {
+        Auth.fetch('http://127.0.0.1:8000/api/playlists/' + this.props.playlistId + "/elements/" + item.order + "/",
+            'DELETE', null)
+            .then((response) => {
+                if (response.status == 200)
+                    this.update();
+            }).catch((err) => {
                 console.log(err)
-            }
-            )
+            })
     }
     handleMoveClick = (up, item) => {
-        fetch('http://127.0.0.1:8000/api/playlists/' + this.props.playlistId + "/elements/" + item.order + "/", {
-            method: 'PATCH',
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            },
-            body: JSON.stringify({ order: item.order + (up ? -1 : 1) }),
-
-        }).then((response) => {
-            console.log(response);
-            if (response.status == 200)
-                this.update();
-            return response.json();
-        }
-        )
-            .then((data) => {
-            })
-            .catch((err) => {
+        Auth.fetch('http://127.0.0.1:8000/api/playlists/' + this.props.playlistId + "/elements/" + item.order + "/",
+            'PATCH', JSON.stringify({ order: item.order + (up ? -1 : 1) }))
+            .then((response) => {
+                if (response.status == 200)
+                    this.update();
+            }).catch((err) => {
                 console.log(err)
-            }
-            )
+            })
     }
     render() {
 

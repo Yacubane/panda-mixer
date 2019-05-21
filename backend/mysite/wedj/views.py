@@ -206,7 +206,7 @@ class PlaylistElementDetailView(mixins.RetrieveModelMixin,
 
         # Notify users via websocket that playlist has been updated
         send_channel_message("chat_"+link_id, "PLAYLIST_PATCH")
-        return Response(status=status.HTTP_200_OK)
+        return Response(data={}, status=status.HTTP_200_OK)
 
     def delete(self, request, link_id, order):
         playlist = Playlist.objects.get(link_id=link_id)
@@ -227,7 +227,7 @@ class PlaylistElementDetailView(mixins.RetrieveModelMixin,
 
         # Notify users via websocket that playlist has been updated
         send_channel_message("chat_"+link_id, "PLAYLIST_DELETE")
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(data={}, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
