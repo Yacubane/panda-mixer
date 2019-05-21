@@ -58,8 +58,8 @@ export default class Playlist extends Component {
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval);
     this.websocket.onclose = function () { };
+    this.websocket.onerror = (error) => { };
     this.websocket.close();
   }
 
@@ -136,8 +136,6 @@ export default class Playlist extends Component {
       inputValueYT: evt.target.value,
     });
 
-    clearInterval(this.interval);
-    this.interval = setTimeout(() => this.handleYoutubeQueryUpdate(), 1000);
   }
 
 
@@ -242,7 +240,7 @@ export default class Playlist extends Component {
     return (
       <SiteLayout className={styles.root}>
         <Modal
-          title="Vertically centered modal dialog"
+          title="Add playlist item"
           centered
           visible={this.state.modalVisible}
           onOk={() => this.setModalVisible(false)}
@@ -251,8 +249,8 @@ export default class Playlist extends Component {
         >
 
           Enter YouTube link:
-          <div>
-            <Input value={this.state.inputValue} onChange={this.updateInputValue} placeholder="Basic usage" />
+          <div style={{ "display": "flex", margin: "0.25em"}}>
+            <Input value={this.state.inputValue} onChange={this.updateInputValue} placeholder="Type YouTube link" />
             <Button
               style={{ width: "5em", }}
               type="primary"
@@ -261,7 +259,15 @@ export default class Playlist extends Component {
           </div>
 
           Or search in YouTube:
-          <Input placeholder="Basic usage2" onChange={this.updateInputValueYT} />
+          <div style={{ "display": "flex", margin: "0.25em"}}>
+            <Input value={this.state.inputValueYT} onChange={this.updateInputValueYT} placeholder="Search in YouTube" />
+            <Button
+              style={{ width: "5em", }}
+              type="primary"
+              onClick={() => this.handleYoutubeQueryUpdate()}
+            > Search </Button>
+          </div>
+
 
           <div style={{ height: "25em", overflow: "auto" }}>
             <List
@@ -282,9 +288,6 @@ export default class Playlist extends Component {
                         <div style={{ 'margin-top': 'auto' }}>
                           <Button style={{ width: "5em" }} type="primary" htmlType="submit" onClick={() => this.handleAddToPlaylistClick(item.id)}>
                             Add
-                          </Button>
-                          <Button style={{ width: "5em" }} type="primary" htmlType="submit" onClick={() => this.handleDeleteClick(item)}>
-                            Play
                           </Button>
                         </div>
                       </div>
