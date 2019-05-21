@@ -129,22 +129,28 @@ class PlaylistElementsView(generics.GenericAPIView):
             next_order = 0
         data = json.loads(request.body)
 
-        url = "https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=" \
+        url = "https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" \
               + data['id'] + "&key=AIzaSyAKkadTlzyGJd2h1Gz6x0AwruEJK2ebX0E"
 
         response = json.loads(requests.get(url).text)
 
+        create = True
+        title = data['id']
         try:
+            if response['pageInfo']['totalResults'] == 0:
+                create = False
+                return Response(status=status.HTTP_404_NOT_FOUND)
             title = response['items'][0]['snippet']['title']
         except:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            pass
 
-        PlaylistElement.objects.create(
-            playlist=playlist,
-            data=data['id'],
-            order=next_order + 1,
-            title=title,
-        )
+        if create:
+            PlaylistElement.objects.create(
+                playlist=playlist,
+                data=data['id'],
+                order=next_order + 1,
+                title=title,
+            )
 
         # Notify users via websocket that playlist has been updated
         send_channel_message("chat_"+link_id, "PLAYLIST_ADD")
