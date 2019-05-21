@@ -316,7 +316,7 @@ export default class Playlist extends Component {
             </div>
             <div>
               {this.isVisibleOrOwner() &&
-                <MusicList ref={this.musicList} playlistId={this.props.match.params.id} onPlayClick={(order, id) => { this.setState({ lastVideoOrder: order }); this.YTPlayer.current.playVideo(id) }} />}
+                <MusicList ref={this.musicList} playlistId={this.props.match.params.id} showEditOptions={() => this.isEditableOrOwner()} onPlayClick={(order, id) => { this.setState({ lastVideoOrder: order }); this.YTPlayer.current.playVideo(id) }} />}
               {this.isntVisibleOrOwner() &&
                 <p className={styles.hiddenPlaylistText}> This playlist isn't visible publicly.<br />Ask owner to unhide it! </p>}
             </div>
