@@ -10,11 +10,14 @@ export default class SiteLayout extends Component {
     constructor(props) {
         super(props);
     }
+    componentDidMount() {
+        document.title = "Panda Mixer"
+    }
     render() {
         return (
             <Layout className="Root-Layout">
                 <SiteHeader />
-                <Content style={{ padding: '0 0.5em',     display: "flex" }}>
+                <Content style={{ padding: '0 0.5em', display: "flex" }}>
                     {this.props.children}
                 </Content>
                 <SiteFooter />

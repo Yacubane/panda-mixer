@@ -8,7 +8,7 @@ import './SiteHeader.css';
 import { Button } from 'antd/lib/radio';
 import { withRouter } from 'react-router-dom'
 import Auth from '../functions/Auth'
-
+import logo from '../assets/logo.png'
 const { Header, Content, Footer } = Layout;
 
 const mapStateToProps = (state) => {
@@ -50,7 +50,9 @@ class SiteHeader extends Component {
                     onClick={this.handleClick}
                 >
                     <Menu.Item style={{ float: 'left' }} key="homepage">
-                        <NavLink to="/"> <Icon type="home" />PANDA Mixer </NavLink>
+                        <NavLink to="/">
+                        <img style={{height: "55px"}} src={logo} />
+                        </NavLink>
                     </Menu.Item>
 
                     {!this.props.loggedIn && (
