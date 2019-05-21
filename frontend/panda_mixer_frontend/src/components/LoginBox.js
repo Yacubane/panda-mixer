@@ -45,12 +45,28 @@ class LoginBox extends Component {
         }
         )
             .then((data) => {
-                localStorage.setItem('JWT_ACCESS_TOKEN', data.access);
-                localStorage.setItem('JWT_REFRESH_TOKEN', data.refresh);
-                localStorage.setItem('JWT_TOKEN_GET_DATE', new Date())
-                localStorage.setItem('JWT_USERNAME', username)
-                this.props.onLoggedIn()
-                this.props.history.push('/')
+                if (status == 200) {
+                    localStorage.setItem('JWT_ACCESS_TOKEN', data.access);
+                    localStorage.setItem('JWT_REFRESH_TOKEN', data.refresh);
+                    localStorage.setItem('JWT_TOKEN_GET_DATE', new Date())
+                    localStorage.setItem('JWT_USERNAME', username)
+                    this.props.onLoggedIn()
+                    this.props.history.push('/')
+                } else if (status == 401) {
+                    this.props.form.setFields({
+                        "username": {
+                            value: this.props.form.getFieldValue("username"),
+                            errors: [new Error("Wrong credentials")],
+                        },
+                    });
+                } else {
+                    this.props.form.setFields({
+                        "username": {
+                            value: this.props.form.getFieldValue("username"),
+                            errors: [new Error("Unknown error")],
+                        },
+                    });
+                }
                 console.log(data)
             })
             .catch((err) => {
