@@ -16,7 +16,7 @@ export default class Index extends Component {
       <SiteLayout>
         <CenterBox>
           <div className={styles.Content} >
-            <img src={image} width="65%" />
+            <img src={image} width="35%" />
           </div>
         </CenterBox>
       </SiteLayout >

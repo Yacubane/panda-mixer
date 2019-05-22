@@ -68,7 +68,7 @@ export default class MusicList extends Component {
             })
     }
     render() {
-        
+
         return (
             <div className={styles.container}>
                 <div style={{ width: "100%" }}>
