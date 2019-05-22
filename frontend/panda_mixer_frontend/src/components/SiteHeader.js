@@ -33,6 +33,7 @@ class SiteHeader extends Component {
             this.props.history.push("/login/")
         } else if (e.key == "logout") {
             Auth.logout()
+            this.props.history.push("/")
         }
     };
 
