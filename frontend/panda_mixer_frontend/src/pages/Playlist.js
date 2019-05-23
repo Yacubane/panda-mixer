@@ -11,6 +11,8 @@ import MusicList from '../components/MusicList';
 import YouTubePlayer from '../components/YouTubePlayer';
 import Auth from '../functions/Auth';
 import { withRouter } from 'react-router-dom'
+import image from "../assets/404.png";
+import hidden from "../assets/not_visible.png"
 
 class Playlist extends Component {
 
@@ -33,8 +35,8 @@ class Playlist extends Component {
       console.log(data.message)
 
       if (data.message == "PLAYLIST_ADD" ||
-        data.message == "PLAYLIST_PATCH" ||
-        data.message == "PLAYLIST_DELETE") {
+          data.message == "PLAYLIST_PATCH" ||
+          data.message == "PLAYLIST_DELETE") {
         if (this.musicList.current != null)
           this.musicList.current.update()
       } else if (data.message == "PERMISSIONS_CHANGE") {
@@ -326,7 +328,10 @@ class Playlist extends Component {
               {this.isVisibleOrOwner() &&
                 <MusicList ref={this.musicList} playlistId={this.props.match.params.id} showEditOptions={() => this.isEditableOrOwner()} onPlayClick={(order, id) => { this.setState({ lastVideoOrder: order }); this.YTPlayer.current.playVideo(id) }} />}
               {this.isntVisibleOrOwner() &&
-                <p className={styles.hiddenPlaylistText}> This playlist isn't visible publicly.<br />Ask owner to unhide it! </p>}
+                <CenterBox>
+                    <img className={styles.Image} src={hidden}/>
+                </CenterBox>
+              }
             </div>
             <div>
               <div style={{ 'text-align': 'center', }}>
