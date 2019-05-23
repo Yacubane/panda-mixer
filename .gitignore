@@ -3,3 +3,4 @@ backend/mysite/db.sqlite3
 backend/mysite/panda_mixer/__pycache__
 backend/mysite/mysite/__pycache__
 backend/mysite/panda_mixer/migrations
+!backend/mysite/panda_mixer/migrations/__init__.py
