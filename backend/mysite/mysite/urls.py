@@ -17,6 +17,6 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
-    path('', include('wedj.urls')),
+    path('', include('panda_mixer.urls')),
     path('admin/', admin.site.urls),
 ]

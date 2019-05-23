@@ -1,12 +1,12 @@
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
-import wedj.routing
+import panda_mixer.routing
 
 application = ProtocolTypeRouter({
     # (http->django views is added by default)
     'websocket': AuthMiddlewareStack(
         URLRouter(
-            wedj.routing.websocket_urlpatterns
+            panda_mixer.routing.websocket_urlpatterns
         )
     ),
 })

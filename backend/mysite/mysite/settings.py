@@ -38,10 +38,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'channels',
-    'wedj.apps.WedjConfig',
+    'panda_mixer.apps.PandaMixerConfig',
     'corsheaders',
 ]
-AUTH_USER_MODEL = 'wedj.User'
+AUTH_USER_MODEL = 'panda_mixer.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

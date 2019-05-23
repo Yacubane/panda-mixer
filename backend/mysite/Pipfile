@@ -7,6 +7,12 @@ verify_ssl = true
 
 [packages]
 django = "*"
+djangorestframework = "*"
+channels = "*"
+channels-redis = "*"
+djangorestframework-simplejwt = "*"
+django-cors-headers = "*"
+requests = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"
