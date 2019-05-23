@@ -18,14 +18,14 @@ def validate_playlist_types(sender, instance, **kwargs):
     valid_types = [t[0] for t in sender.PLAYLIST_TYPES]
     if instance.type not in valid_types:
         raise ValidationError({
-            "detail" : 'Playlist type is not one of the permitted values: {}'.format(valid_types)
+            "detail": 'Playlist type is not one of the permitted values: {}'.format(valid_types)
         })
 
 
 class Playlist(models.Model):
     PLAYLIST_TYPES = (
         ('YT', 'YouTube'),
-        #('SP', 'Spotify'),
+        # ('SP', 'Spotify'),
     )
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                               null=True, on_delete=models.CASCADE)

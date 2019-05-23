@@ -21,7 +21,7 @@ class PlaylistElementsPermission(permissions.BasePermission):
             return True
 
         if request.method == 'POST' and obj.public_editable:
-            return True    
+            return True
 
         return False
 
@@ -35,9 +35,10 @@ class PlaylistElementPermission(permissions.BasePermission):
             return True
 
         if (request.method == 'PATCH' or request.method == 'DELETE') and obj.playlist.public_editable:
-            return True    
+            return True
 
         return False
+
 
 class UserDetailPermission(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):

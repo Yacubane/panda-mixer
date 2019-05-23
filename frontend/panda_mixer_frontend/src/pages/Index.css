@@ -18,13 +18,15 @@
     font-size: 2em;
     font-weight: bold;
     margin: 0.25em;
-    color:white;
+    color: white;
 }
+
 .Content-Text {
     font-size: 1.25em;
     margin: 0.25em;
-    color:white;
+    color: white;
 }
+
 .Content-Button {
     height: 60px;
     padding: 0 20px;
@@ -35,10 +37,12 @@
     background-color: #FF0000;
     border-color: #EE0000;
 }
+
 .Content-Button:hover {
     background-color: #DD0000;
     border-color: #DD0000;
 }
+
 .Content-Button:focus {
     background-color: #DD0000;
     border-color: #DD0000;

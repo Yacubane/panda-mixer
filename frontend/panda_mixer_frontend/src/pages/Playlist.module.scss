@@ -1,55 +1,56 @@
 .root {
-    :global(.ant-modal) {
-        width:1000px;
-    }
+  :global(.ant-modal) {
+    width: 1000px;
+  }
 }
 
 .basicButton {
-    width: 5em;
-    margin-left: 0.5em;
-    margin-right: 0.5em;
-    margin-bottom: 0.25em;
-    border-color: white;
-    background-color: white;
-    color: black;
+  width: 5em;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  margin-bottom: 0.25em;
+  border-color: white;
+  background-color: white;
+  color: black;
 }
 
 .basicButton:hover {
-    border-color: black;
-    background-color: black;
-    color: white
+  border-color: black;
+  background-color: black;
+  color: white
 }
 
 .basicButton:focus:not(:hover) {
-    border-color: white;
-    background-color: white;
-    color: black;
+  border-color: white;
+  background-color: white;
+  color: black;
 }
+
 .basicButton:active {
-    transform: scale(0.9);
-    transition-timing-function: ease-in;
-    transition: 0.08s;
+  transform: scale(0.9);
+  transition-timing-function: ease-in;
+  transition: 0.08s;
 
 }
 
 .addButton {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .addButton > span {
-    font-weight: normal;
+  font-weight: normal;
 }
 
 
 .hiddenPlaylistText {
-    margin-bottom: 5em;
-    margin-top: 5em;
-    color: white;
-    font-size: 20pt;
-    text-align: center;
+  margin-bottom: 5em;
+  margin-top: 5em;
+  color: white;
+  font-size: 20pt;
+  text-align: center;
 }
 
 .Image {
-    width: 90%;
-    max-width: 31em;
+  width: 90%;
+  max-width: 31em;
 }

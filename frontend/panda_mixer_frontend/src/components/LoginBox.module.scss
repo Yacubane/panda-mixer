@@ -1,28 +1,28 @@
 .loginForm {
-    :global(.ant-form-item-label > label){
-        color: white;
-    }
+  :global(.ant-form-item-label > label) {
+    color: white;
+  }
 }
 
 .registerNow {
-    color:white;
+  color: white;
 }
 
 .loginButton {
-    width: 100%;
-    border-color: transparent;
-    background-color: red;
-    color: white;
+  width: 100%;
+  border-color: transparent;
+  background-color: red;
+  color: white;
 }
 
 .loginButton:hover {
-    border-color: black;
-    background-color: black;
-    color: white
+  border-color: black;
+  background-color: black;
+  color: white
 }
 
 .loginButton:focus {
-    border-color: white;
-    background-color: white;
-    color: black
+  border-color: white;
+  background-color: white;
+  color: black
 }

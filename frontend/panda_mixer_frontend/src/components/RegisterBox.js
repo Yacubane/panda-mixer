@@ -1,16 +1,17 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
     Form, Icon, Input, Button,
 } from 'antd';
 import 'antd/dist/antd.css';
 import styles from './RegisterBox.module.scss';
 import buttonStyles from './LoginBox.module.scss';
-import { withRouter } from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 
 class RegisterBox extends Component {
     state = {
         loading: false,
-    }
+    };
+
     setFormError(formElement, text) {
         this.props.form.setFields({
             [formElement]: {
@@ -27,28 +28,27 @@ class RegisterBox extends Component {
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
             },
-            body: JSON.stringify({ username: username, password: password, email: email })
+            body: JSON.stringify({username: username, password: password, email: email})
         }).then(function (response) {
-            status = response.status;
-            return response.json();
-        }
+                status = response.status;
+                return response.json();
+            }
         )
             .then((data) => {
-                this.setState({ loading: false });
+                this.setState({loading: false});
                 if (status == 201) {
                     this.props.onRegister()
                 } else {
-                    if (data.hasOwnProperty('email')) this.setFormError('email', data['email'])
-                    if (data.hasOwnProperty('username')) this.setFormError('username', data['username'])
+                    if (data.hasOwnProperty('email')) this.setFormError('email', data['email']);
+                    if (data.hasOwnProperty('username')) this.setFormError('username', data['username']);
                     if (data.hasOwnProperty('password')) this.setFormError('password', data['password'])
                 }
             })
             .catch((err) => {
-                console.log(err)
-            }
+                    console.log(err)
+                }
             )
     }
-
 
 
     handleSubmit = (e) => {
@@ -73,29 +73,29 @@ class RegisterBox extends Component {
                     err = true;
                 }
                 if (!err) {
-                    this.setState({ loading: true });
+                    this.setState({loading: true});
                     this.register(values.username, values.password, values.email);
                 }
             }
 
         });
-    }
+    };
     compareToFirstPassword = (rule, value, callback) => {
         const form = this.props.form;
         if (value && value !== form.getFieldValue('password')) {
             console.log('Two passwords that you enter is inconsistent!');
         }
-    }
+    };
 
     render() {
         const formItemLayout = {
             labelCol: {
-                xs: { span: 24 },
-                sm: { span: 10 },
+                xs: {span: 24},
+                sm: {span: 10},
             },
             wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 14 },
+                xs: {span: 24},
+                sm: {span: 14},
             },
         };
         const tailFormItemLayout = {
@@ -110,40 +110,42 @@ class RegisterBox extends Component {
                 },
             },
         };
-        const { getFieldDecorator } = this.props.form;
+        const {getFieldDecorator} = this.props.form;
         return (
-            <Form className={styles.loginForm} {...formItemLayout} onSubmit={this.handleSubmit} >
+            <Form className={styles.loginForm} {...formItemLayout} onSubmit={this.handleSubmit}>
                 <Form.Item className="Hint" label="Email">
                     {getFieldDecorator('email', {
-                        rules: [{ required: true, message: 'Please input your email!' }],
+                        rules: [{required: true, message: 'Please input your email!'}],
                     })(
-                        <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Email" />
+                        <Input prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>} placeholder="Email"/>
                     )}
                 </Form.Item>
                 <Form.Item label="Username">
                     {getFieldDecorator('username', {
-                        rules: [{ required: true, message: 'Please input your username!' }],
+                        rules: [{required: true, message: 'Please input your username!'}],
                     })(
-                        <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
+                        <Input prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>} placeholder="Username"/>
                     )}
                 </Form.Item>
                 <Form.Item label="Password">
                     {getFieldDecorator('password', {
-                        rules: [{ required: true, message: 'Please input your Password!' }],
+                        rules: [{required: true, message: 'Please input your Password!'}],
                     })(
-                        <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
+                        <Input prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}}/>} type="password"
+                               placeholder="Password"/>
                     )}
                 </Form.Item>
                 <Form.Item label="Confirm password">
                     {getFieldDecorator('confirm', {
-                        rules: [{ required: true, message: 'Please confirm your password!', }, {
-                        }],
+                        rules: [{required: true, message: 'Please confirm your password!',}, {}],
                     })(
-                        <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Confirm password" />
+                        <Input prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}}/>} type="password"
+                               placeholder="Confirm password"/>
                     )}
                 </Form.Item>
                 <Form.Item {...tailFormItemLayout}>
-                    <Button type="primary" htmlType="submit" className={buttonStyles.loginButton} loading={this.state.loading}>
+                    <Button type="primary" htmlType="submit" className={buttonStyles.loginButton}
+                            loading={this.state.loading}>
                         Register
                     </Button>
                 </Form.Item>

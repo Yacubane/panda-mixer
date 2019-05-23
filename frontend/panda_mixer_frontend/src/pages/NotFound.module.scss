@@ -1,23 +1,23 @@
 .Content {
-    text-align: center;
-    font-size: 5em;
-    margin: 0.25em;
-    color:white;
+  text-align: center;
+  font-size: 5em;
+  margin: 0.25em;
+  color: white;
 }
 
 @media (min-width: 0em) {
-    .Content {
-        width: 100%;
-    }
+  .Content {
+    width: 100%;
+  }
 }
 
 @media (min-width: 42em) {
-    .Content {
-        width: 42em;
-    }
+  .Content {
+    width: 42em;
+  }
 }
 
 .Image {
-    width: 90%;
-    max-width: 6em;
+  width: 90%;
+  max-width: 6em;
 }

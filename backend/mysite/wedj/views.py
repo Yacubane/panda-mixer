@@ -78,14 +78,14 @@ class PlaylistDetailsView(generics.GenericAPIView):
             playlist.public_visible = data['public_visible']
 
         playlist.save()
-        send_channel_message("chat_"+link_id, "PERMISSIONS_CHANGE")
+        send_channel_message("chat_" + link_id, "PERMISSIONS_CHANGE")
         return Response(data={}, status=status.HTTP_200_OK)
 
     def delete(self, request, link_id, format=None):
         playlist = Playlist.objects.get(link_id=link_id)
         self.check_object_permissions(self.request, playlist)
         playlist.delete()
-        send_channel_message("chat_"+link_id, "PERMISSIONS_CHANGE")
+        send_channel_message("chat_" + link_id, "PERMISSIONS_CHANGE")
         return Response(data={}, status=status.HTTP_200_OK)
 
 
@@ -153,7 +153,7 @@ class PlaylistElementsView(generics.GenericAPIView):
             )
 
         # Notify users via websocket that playlist has been updated
-        send_channel_message("chat_"+link_id, "PLAYLIST_ADD")
+        send_channel_message("chat_" + link_id, "PLAYLIST_ADD")
         return Response(status=status.HTTP_201_CREATED)
 
     def get_queryset(self):
@@ -212,7 +212,7 @@ class PlaylistElementDetailView(mixins.RetrieveModelMixin,
         playlist_element.save()
 
         # Notify users via websocket that playlist has been updated
-        send_channel_message("chat_"+link_id, "PLAYLIST_PATCH")
+        send_channel_message("chat_" + link_id, "PLAYLIST_PATCH")
         return Response(data={}, status=status.HTTP_200_OK)
 
     def delete(self, request, link_id, order):
@@ -233,7 +233,7 @@ class PlaylistElementDetailView(mixins.RetrieveModelMixin,
             elem.save()
 
         # Notify users via websocket that playlist has been updated
-        send_channel_message("chat_"+link_id, "PLAYLIST_DELETE")
+        send_channel_message("chat_" + link_id, "PLAYLIST_DELETE")
         return Response(data={}, status=status.HTTP_200_OK)
 
 
