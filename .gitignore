@@ -1,5 +1,5 @@
 frontend/panda_mixer/node_modules
 backend/mysite/db.sqlite3
 backend/mysite/panda_mixer/__pycache__
-backend/mysite/mysite/__Pycache__
+backend/mysite/mysite/__pycache__
 backend/mysite/panda_mixer/migrations
