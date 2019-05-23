@@ -1,5 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import styles from './YouTubePlayer.module.scss';
+import CenterBox from "../pages/Playlist";
+import hidden from "../assets/not_visible.png";
 
 let loadYT;
 
@@ -19,9 +21,11 @@ export default class YouTubePlayer extends Component {
                 height: this.props.height || "100%",
                 width: this.props.width || "100%",
                 videoId: this.props.YTid,
+                volume: 100,
                 events: {
                     onStateChange: this.onPlayerStateChange
                 }
+
             })
         })
     }
