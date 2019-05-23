@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+cd $(dirname $0)
 cd mysite
 if [ "$1" = "--clear" ]; then
    rm -f db.sqlite3
