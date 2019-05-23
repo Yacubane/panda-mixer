@@ -1,6 +1,6 @@
-frontend/panda_mixer_frontend/node_modules
+frontend/panda_mixer/node_modules
+frontend/panda_mixer/package-lock.json
 backend/mysite/db.sqlite3
 backend/mysite/wedj/__pycache__
 backend/mysite/mysite/__Pycache__
-frontend/panda_mixer_frontend/package-lock.json
 backend/mysite/wedj/migrations
