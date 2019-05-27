@@ -1,11 +1,11 @@
-import {store} from "../index";
+import { store } from "../index";
 
 export default class Auth {
     static logout = () => {
         localStorage.removeItem('JWT_TOKEN_GET_DATE');
         localStorage.removeItem('JWT_REFRESH_TOKEN');
         localStorage.removeItem('JWT_ACCESS_TOKEN');
-        store.dispatch({type: 'LOGGED_OUT'})
+        store.dispatch({ type: 'LOGGED_OUT' })
     };
     static getUsername = () => {
         return localStorage.getItem('JWT_USERNAME')
@@ -36,21 +36,29 @@ export default class Auth {
                 headers: {
                     "Content-type": "application/json; charset=UTF-8"
                 },
-                body: JSON.stringify({refresh: localStorage.getItem('JWT_REFRESH_TOKEN')})
+                body: JSON.stringify({ refresh: localStorage.getItem('JWT_REFRESH_TOKEN') })
             }).then((response) => {
-                    status = response.status;
-                    return response.json();
+                status = response.status;
+                if (status != 200) {
+                    this.logout();
+                    reject(null)
                 }
+                return response.json();
+            }
             )
                 .then((data) => {
-                    localStorage.setItem('JWT_ACCESS_TOKEN', data.access);
-                    localStorage.setItem('JWT_TOKEN_GET_DATE', new Date());
-                    resolve(null)
+                    if (data.access == null) {
+                        this.logout()
+                        reject(null)
+                    } else {
+                        localStorage.setItem('JWT_ACCESS_TOKEN', data.access);
+                        localStorage.setItem('JWT_TOKEN_GET_DATE', new Date());
+                        resolve(null)
+                    }
                 })
                 .catch((err) => {
-                        localStorage.removeItem('JWT_REFRESH_TOKEN');
-                        reject(null)
-                    }
+                    reject(null)
+                }
                 )
 
         })
@@ -79,22 +87,26 @@ export default class Auth {
                             })
                     })
                     .catch((err) => {
-                        console.log("Error");
-
-                        reject(err)
+                        this.fetch(link, method, body, tries_num--)
+                            .then((response) => {
+                                resolve(response)
+                            })
+                            .catch((err) => {
+                                reject(err)
+                            })
                     });
                 return
             } else {
-                store.dispatch({type: 'LOGGED_OUT'})
+                store.dispatch({ type: 'LOGGED_OUT' })
             }
             fetch(link, {
                 method: method,
                 headers: headers,
                 body: body,
             }).then(function (response) {
-                    status = response.status;
-                    return response.json();
-                }
+                status = response.status;
+                return response.json();
+            }
             )
                 .then((data) => {
                     if (status == 401 && data.code == "token_not_valid") {
@@ -113,21 +125,21 @@ export default class Auth {
                                     reject(err)
                                 })
                         } else {
-                            store.dispatch({type: 'LOGGED_OUT'});
+                            store.dispatch({ type: 'LOGGED_OUT' });
                             localStorage.removeItem('JWT_TOKEN_GET_DATE');
-                            reject({status: status, token_error: true, error: true, is_json: true, json: data})
+                            reject({ status: status, token_error: true, error: true, is_json: true, json: data })
                         }
                     } else {
-                        resolve({status: status, token_error: false, error: false, is_json: true, json: data})
+                        resolve({ status: status, token_error: false, error: false, is_json: true, json: data })
                     }
                 })
                 .catch((err) => {
-                        if (status != -1)
-                            reject({status: status, token_error: false, error: true, is_json: false});
-                        else
-                            reject({status: -1, token_error: false, error: true, is_json: false})
+                    if (status != -1)
+                        reject({ status: status, token_error: false, error: true, is_json: false });
+                    else
+                        reject({ status: -1, token_error: false, error: true, is_json: false })
 
-                    }
+                }
                 )
         })
     }
