@@ -222,6 +222,7 @@ class Playlist extends Component {
 
 
     get_link_id = (link) => {
+        if (!link) return false;
         let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
         let match = link.match(regExp);
         return (match && match[7].length === 11) ? match[7] : false;
