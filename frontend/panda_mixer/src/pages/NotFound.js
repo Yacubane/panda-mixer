@@ -7,16 +7,12 @@ import SiteLayout from '../components/SiteLayout';
 import image from '../assets/404.png'
 
 export default class Index extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <SiteLayout>
                 <CenterBox>
                     <div className={styles.Content}>
-                        <img className={styles.Image} src={image}/>
+                        <img alt="404" className={styles.Image} src={image}/>
                     </div>
                 </CenterBox>
             </SiteLayout>

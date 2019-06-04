@@ -5,12 +5,11 @@ import {Layout, Icon} from 'antd';
 import {NavLink} from 'react-router-dom';
 import 'antd/dist/antd.css';
 import './SiteHeader.css';
-import {Button} from 'antd/lib/radio';
 import {withRouter} from 'react-router-dom'
 import Auth from '../functions/Auth'
 import logo from '../assets/logo.png'
 
-const {Header, Content, Footer} = Layout;
+const {Header} = Layout;
 
 const mapStateToProps = (state) => {
     return {loggedIn: state.login.loggedIn};
@@ -25,22 +24,16 @@ const mapDispatchToProps = (dispatch) => {
 
 
 class SiteHeader extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     handleClick = e => {
-        if (e.key == "login") {
+        if (e.key === "login") {
             this.props.history.push("/login/")
-        } else if (e.key == "logout") {
+        } else if (e.key === "logout") {
             Auth.logout();
             this.props.history.push("/")
         }
     };
 
     render() {
-        const {loggedIn, onLoggedIn} = this.props;
-
         return (
             <Header className="Header" style={{padding: 0}}>
                 <Menu
@@ -53,7 +46,7 @@ class SiteHeader extends Component {
                 >
                     <Menu.Item style={{float: 'left'}} key="homepage">
                         <NavLink to="/">
-                            <img style={{height: "55px"}} src={logo}/>
+                            <img alt="logo" style={{height: "55px"}} src={logo}/>
                         </NavLink>
                     </Menu.Item>
 

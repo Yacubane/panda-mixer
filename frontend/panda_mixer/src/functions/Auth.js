@@ -13,6 +13,8 @@ export default class Auth {
     static isLoggedIn = () => {
         let dateString = localStorage.getItem('JWT_TOKEN_GET_DATE');
         if (dateString == null) return false;
+        let accessToken = localStorage.getItem('JWT_ACCESS_TOKEN');
+        if(accessToken === null || accessToken === "") return false;
         let date = new Date(dateString);
         if (isNaN(date)) return false;
         let currDate = new Date();
@@ -39,7 +41,7 @@ export default class Auth {
                 body: JSON.stringify({ refresh: localStorage.getItem('JWT_REFRESH_TOKEN') })
             }).then((response) => {
                 status = response.status;
-                if (status != 200) {
+                if (status !== 200) {
                     this.logout();
                     reject(null)
                 }
@@ -53,6 +55,7 @@ export default class Auth {
                     } else {
                         localStorage.setItem('JWT_ACCESS_TOKEN', data.access);
                         localStorage.setItem('JWT_TOKEN_GET_DATE', new Date());
+                        store.dispatch({ type: 'LOGGED_IN' })
                         resolve(null)
                     }
                 })
@@ -65,20 +68,28 @@ export default class Auth {
     };
 
     static fetch = (link, method, body) => {
-        return fetch(link, method, body, 2)
+        return this.fetch_(link, method, body, 3)
     };
-    static fetch = (link, method, body, tries_num) => {
+    static fetch_ = (link, method, body, tries_num) => {
+
+        if (tries_num < 1) return null
         return new Promise((resolve, reject) => {
+            if (tries_num < 1) reject(null);
             let status = -1;
             let headers = {
                 "Content-type": "application/json; charset=UTF-8",
             };
             if (this.isLoggedIn()) {
                 headers['Authorization'] = "Bearer " + localStorage.getItem("JWT_ACCESS_TOKEN")
-            } else if (this.wasLoggedIn()) {
+            }
+            if (!this.isLoggedIn() && !this.wasLoggedIn()) {
+                store.dispatch({ type: 'LOGGED_OUT' })
+            }
+
+            if (!this.isLoggedIn() && this.wasLoggedIn()) {
                 this.refreshToken()
                     .then((response) => {
-                        this.fetch(link, method, body, tries_num--)
+                        this.fetch_(link, method, body, tries_num--)
                             .then((response) => {
                                 resolve(response)
                             })
@@ -87,60 +98,47 @@ export default class Auth {
                             })
                     })
                     .catch((err) => {
-                        this.fetch(link, method, body, tries_num--)
+                        this.fetch_(link, method, body, tries_num--)
                             .then((response) => {
                                 resolve(response)
                             })
                             .catch((err) => {
                                 reject(err)
                             })
-                    });
-                return
+                    })
             } else {
-                store.dispatch({ type: 'LOGGED_OUT' })
-            }
-            fetch(link, {
-                method: method,
-                headers: headers,
-                body: body,
-            }).then(function (response) {
-                status = response.status;
-                return response.json();
-            }
-            )
-                .then((data) => {
-                    if (status == 401 && data.code == "token_not_valid") {
-                        if (tries_num > 1) {
-                            this.refreshToken()
+                fetch(link, {
+                    method: method,
+                    headers: headers,
+                    body: body,
+                }).then(function (response) {
+                    status = response.status;
+                    return response.json();
+                }
+                )
+                    .then((data) => {
+                        if (status === 401 && data.code === "token_not_valid") {
+                            if(tries_num > 1 && this.isLoggedIn()) {
+                                localStorage.removeItem('JWT_TOKEN_GET_DATE'); //try to refresh token in next iteration
+                                this.fetch_(link, method, body, tries_num--)
                                 .then((response) => {
-                                    this.fetch(link, method, body, tries_num--)
-                                        .then((response) => {
-                                            resolve(response)
-                                        })
-                                        .catch((err) => {
-                                            reject(err)
-                                        })
+                                    resolve(response)
                                 })
                                 .catch((err) => {
                                     reject(err)
                                 })
+                            } else {
+                                reject({ status: status, token_error: true, error: true, is_json: true, json: data })
+                            }
                         } else {
-                            store.dispatch({ type: 'LOGGED_OUT' });
-                            localStorage.removeItem('JWT_TOKEN_GET_DATE');
-                            reject({ status: status, token_error: true, error: true, is_json: true, json: data })
+                            resolve({ status: status, token_error: false, error: false, is_json: true, json: data })
                         }
-                    } else {
-                        resolve({ status: status, token_error: false, error: false, is_json: true, json: data })
-                    }
-                })
-                .catch((err) => {
-                    if (status != -1)
+                    })
+                    .catch((err) => {
                         reject({ status: status, token_error: false, error: true, is_json: false });
-                    else
-                        reject({ status: -1, token_error: false, error: true, is_json: false })
-
-                }
-                )
+                    }
+                    )
+            }
         })
     }
 }

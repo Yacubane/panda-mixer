@@ -8,10 +8,6 @@ import SiteFooter from '../components/SiteFooter';
 const {Content} = Layout;
 
 export default class SiteLayout extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     componentDidMount() {
         document.title = "Panda Mixer"
     }

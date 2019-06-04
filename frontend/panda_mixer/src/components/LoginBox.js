@@ -2,12 +2,11 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'
 import {
-    Form, Icon, Input, Button, Checkbox,
+    Form, Icon, Input, Button,
 } from 'antd';
 import {NavLink} from 'react-router-dom';
 import 'antd/dist/antd.css';
 import styles from './LoginBox.module.scss';
-import login from '../reducers/Login';
 
 
 const mapStateToProps = (state) => {
@@ -46,14 +45,14 @@ class LoginBox extends Component {
             }
         )
             .then((data) => {
-                if (status == 200) {
+                if (status === 200) {
                     localStorage.setItem('JWT_ACCESS_TOKEN', data.access);
                     localStorage.setItem('JWT_REFRESH_TOKEN', data.refresh);
                     localStorage.setItem('JWT_TOKEN_GET_DATE', new Date());
                     localStorage.setItem('JWT_USERNAME', username);
                     this.props.onLoggedIn();
                     this.props.history.push('/')
-                } else if (status == 401) {
+                } else if (status === 401) {
                     this.props.form.setFields({
                         "username": {
                             value: this.props.form.getFieldValue("username"),

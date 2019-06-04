@@ -36,7 +36,7 @@ class RegisterBox extends Component {
         )
             .then((data) => {
                 this.setState({loading: false});
-                if (status == 201) {
+                if (status === 201) {
                     this.props.onRegister()
                 } else {
                     if (data.hasOwnProperty('email')) this.setFormError('email', data['email']);
@@ -68,7 +68,7 @@ class RegisterBox extends Component {
                     this.setFormError('password', 'Password must have at least 6 letter');
                     err = true;
                 }
-                if (this.props.form.getFieldValue('password') != this.props.form.getFieldValue('confirm')) {
+                if (this.props.form.getFieldValue('password') !== this.props.form.getFieldValue('confirm')) {
                     this.setFormError('confirm', 'Password doesn\'t match');
                     err = true;
                 }

@@ -6,7 +6,7 @@ import {withRouter} from 'react-router-dom'
 import SiteLayout from '../components/SiteLayout';
 import CenterBox from '../components/CenterBox';
 import RegisterBox from '../components/RegisterBox';
-import {Modal, Button} from 'antd';
+import {Modal} from 'antd';
 
 class Register extends Component {
     constructor(props) {

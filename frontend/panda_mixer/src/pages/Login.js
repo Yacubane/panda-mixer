@@ -8,10 +8,6 @@ import CenterBox from '../components/CenterBox';
 import LoginBox from '../components/LoginBox';
 
 export default class Index extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <SiteLayout>

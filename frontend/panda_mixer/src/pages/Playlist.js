@@ -11,7 +11,6 @@ import MusicList from '../components/MusicList';
 import YouTubePlayer from '../components/YouTubePlayer';
 import Auth from '../functions/Auth';
 import {withRouter} from 'react-router-dom'
-import image from "../assets/404.png";
 import hidden from "../assets/not_visible.png"
 
 class Playlist extends Component {
@@ -34,12 +33,12 @@ class Playlist extends Component {
             var data = JSON.parse(e.data);
             console.log(data.message);
 
-            if (data.message == "PLAYLIST_ADD" ||
-                data.message == "PLAYLIST_PATCH" ||
-                data.message == "PLAYLIST_DELETE") {
-                if (this.musicList.current != null)
+            if (data.message === "PLAYLIST_ADD" ||
+                data.message === "PLAYLIST_PATCH" ||
+                data.message === "PLAYLIST_DELETE") {
+                if (this.musicList.current !== null)
                     this.musicList.current.update()
-            } else if (data.message == "PERMISSIONS_CHANGE") {
+            } else if (data.message === "PERMISSIONS_CHANGE") {
                 this.updatePlaylistInfo()
             }
         };
@@ -80,18 +79,18 @@ class Playlist extends Component {
     updatePlaylistInfo = () => {
         Auth.fetch('http://127.0.0.1:8000/api/playlists/' + this.props.match.params.id + '/', 'GET', null)
             .then((response) => {
-                if (response.status == 200) {
+                if (response.status === 200) {
                     this.setState(prevState => ({
                         ...prevState,
                         playlistData: {
                             publicEditable: response.json.public_editable,
                             publicVisible: response.json.public_visible,
                             owner: response.json.owner,
-                            isOwner: Auth.isLoggedIn() && response.json.owner == Auth.getUsername()
+                            isOwner: Auth.isLoggedIn() && response.json.owner === Auth.getUsername()
                         }
                     }));
                 } else {
-                    throw null
+                    this.props.history.push('/404')
                 }
             })
             .catch((err) => {
@@ -105,7 +104,7 @@ class Playlist extends Component {
             JSON.stringify({public_editable: !this.state.playlistData.publicEditable}))
             .then((response) => {
                 console.log(response.status);
-                if (response.status == 200) {
+                if (response.status === 200) {
 
                 }
             })
@@ -119,13 +118,8 @@ class Playlist extends Component {
         Auth.fetch('http://127.0.0.1:8000/api/playlists/' + this.props.match.params.id + '/', 'PATCH',
             JSON.stringify({public_visible: !this.state.playlistData.publicVisible}))
             .then((response) => {
-                console.log(response.status);
-                if (response.status == 200) {
-
-                }
             })
             .catch((err) => {
-
             })
     };
 
@@ -350,7 +344,7 @@ class Playlist extends Component {
                             }}/>}
                             {this.isntVisibleOrOwner() &&
                             <CenterBox>
-                                <img className={styles.Image} src={hidden}/>
+                                <img alt="playlist" className={styles.Image} src={hidden}/>
                             </CenterBox>
                             }
                         </div>

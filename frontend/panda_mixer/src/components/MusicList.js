@@ -18,7 +18,7 @@ export default class MusicList extends Component {
         Auth.fetch('http://127.0.0.1:8000/api/playlists/' + this.props.playlistId + '/elements/',
             'GET', null)
             .then((response) => {
-                if (response.status == 200) {
+                if (response.status === 200) {
                     response.json.sort((a, b) => a.order < b.order ? -1 : 1);
                     this.setState({
                         data: response.json,
@@ -38,7 +38,7 @@ export default class MusicList extends Component {
 
     getVideoIDByOrder = (order) => {
         try {
-            return this.state.data.filter(a => a.order == order)[0]['data']
+            return this.state.data.filter(a => a.order === order)[0]['data']
         } catch (error) {
             console.error(error);
         }
@@ -53,7 +53,7 @@ export default class MusicList extends Component {
         Auth.fetch('http://127.0.0.1:8000/api/playlists/' + this.props.playlistId + "/elements/" + item.order + "/",
             'DELETE', null)
             .then((response) => {
-                if (response.status == 200)
+                if (response.status === 200)
                     this.update();
             }).catch((err) => {
             console.log(err)
@@ -64,7 +64,7 @@ export default class MusicList extends Component {
         Auth.fetch('http://127.0.0.1:8000/api/playlists/' + this.props.playlistId + "/elements/" + item.order + "/",
             'PATCH', JSON.stringify({order: item.order + (up ? -1 : 1)}))
             .then((response) => {
-                if (response.status == 200)
+                if (response.status === 200)
                     this.update();
             }).catch((err) => {
             console.log(err)

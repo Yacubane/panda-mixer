@@ -3,12 +3,10 @@ import {withRouter} from 'react-router-dom'
 import 'antd/dist/antd.css';
 import styles from './Playlists.module.scss';
 
-import {Button, Modal, Input, List, Icon} from 'antd';
+import {Button, List} from 'antd';
 
 import SiteLayout from '../components/SiteLayout';
 import CenterBox from '../components/CenterBox';
-import MusicList from '../components/MusicList';
-import YouTubePlayer from '../components/YouTubePlayer';
 import Auth from '../functions/Auth';
 
 class Playlists extends Component {
@@ -29,14 +27,10 @@ class Playlists extends Component {
     handleDeleteClick = (item) => {
         Auth.fetch('http://127.0.0.1:8000/api/playlists/' + item.link_id + "/", 'DELETE', null)
             .then((response) => {
-                console.log("DUPA ");
-                console.log(response);
-
-                if (response.status == 200) {
+                if (response.status === 200) {
                     this.update()
                 }
             }).catch((err) => {
-            console.log(err)
         })
     };
 
@@ -49,7 +43,7 @@ class Playlists extends Component {
             'GET', null)
             .then((response) => {
                 console.log(response);
-                if (response.status == 200) {
+                if (response.status === 200) {
                     this.setState({
                         data: response.json,
                     });

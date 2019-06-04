@@ -1,8 +1,4 @@
-import React, {Component, PropTypes} from 'react';
-import styles from './YouTubePlayer.module.scss';
-import CenterBox from "../pages/Playlist";
-import hidden from "../assets/not_visible.png";
-
+import React, {Component} from 'react';
 let loadYT;
 
 export default class YouTubePlayer extends Component {
