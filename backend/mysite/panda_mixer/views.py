@@ -142,7 +142,8 @@ class PlaylistElementsView(generics.GenericAPIView):
                 create = False
                 return Response(status=status.HTTP_404_NOT_FOUND)
             title = response['items'][0]['snippet']['title']
-        except:
+        except KeyError:
+            title = 'no title'
             pass
 
         if create:
