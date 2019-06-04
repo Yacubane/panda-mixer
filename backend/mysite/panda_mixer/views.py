@@ -8,7 +8,8 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from .serializers import PlaylistSerializer
 from .serializers import UserSerializer, PlaylistElementSerializer
-from .permissions import PlaylistPermission, PlaylistElementsPermission, PlaylistElementPermission
+from .permissions import PlaylistPermission, PlaylistElementsPermission, \
+    PlaylistElementPermission
 from .permissions import UserDetailPermission
 
 import string
@@ -63,7 +64,7 @@ class PlaylistDetailsView(generics.GenericAPIView):
         data = serializer.data
 
         # we want username as owner, not pk
-        if playlist.owner != None:
+        if playlist.owner is not None:
             data['owner'] = playlist.owner.username
         return Response(data=data, status=status.HTTP_200_OK)
 
@@ -125,7 +126,7 @@ class PlaylistElementsView(generics.GenericAPIView):
         self.check_object_permissions(self.request, playlist)
         next_order = PlaylistElement.objects.filter(
             playlist=playlist).aggregate(Max('order'))['order__max']
-        if next_order == None:
+        if next_order is None:
             next_order = 0
         data = json.loads(request.body)
 
@@ -179,7 +180,8 @@ class PlaylistElementDetailView(mixins.RetrieveModelMixin,
     def patch(self, request, link_id, order):
         data = json.loads(request.body)
         if 'order' not in data:
-            return Response(data="No order", status=status.HTTP_400_BAD_REQUEST)
+            return Response(data="No order",
+                            status=status.HTTP_400_BAD_REQUEST)
 
         new_order = data['order']
         playlist = Playlist.objects.get(link_id=link_id)
@@ -224,7 +226,7 @@ class PlaylistElementDetailView(mixins.RetrieveModelMixin,
 
         max_order = PlaylistElement.objects.filter(
             playlist=playlist).aggregate(Max('order'))['order__max']
-        if max_order == None:
+        if max_order is None:
             max_order = 0
 
         for i in range(order + 1, max_order + 1):
@@ -247,14 +249,15 @@ def playlist_view(request):
 
 def random_string(string_length):
     letters_and_digits = string.ascii_letters + string.digits
-    return ''.join(random.choice(letters_and_digits) for i in range(string_length))
+    return ''.join(random.choice(letters_and_digits)
+                   for i in range(string_length))
 
 
 @api_view(['GET'])
 def create_playlist(request):
     if request.method == 'GET':
         id = random_string(6)
-        playlist = Playlist.objects.create(link_id=id)
+        Playlist.objects.create(link_id=id)
         return Response({'link_id': id})
 
 
@@ -269,16 +272,15 @@ def index(request):
 
 def playlist(request, playlist_id):
     try:
-        playlist = Playlist.objects.get(link_id=playlist_id)
+        Playlist.objects.get(link_id=playlist_id)
     except Playlist.DoesNotExist:
         return render(request, 'wedj/404.html', context=None)
     return render(request, 'wedj/playlist.html', {'playlist_id': playlist_id})
 
 
 def youtube_query(request, query):
-    #  'https://www.googleapis.com/youtube/v3/search?maxResults=25&q=surfitg&key=[YOUR_API_KEY]' \
-
-    url = "https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=10&q=" + \
-          query + "&key=AIzaSyAKkadTlzyGJd2h1Gz6x0AwruEJK2ebX0E"
+    url = "https://www.googleapis.com/youtube/v3/search?part=snippet&type=" \
+          "video&maxResults=10&q=" + query + \
+          "&key=AIzaSyAKkadTlzyGJd2h1Gz6x0AwruEJK2ebX0E"
     response = json.loads(requests.get(url).text)
     return JsonResponse(response)

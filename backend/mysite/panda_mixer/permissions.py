@@ -34,7 +34,8 @@ class PlaylistElementPermission(permissions.BasePermission):
         if request.method == 'GET' and obj.playlist.public_visible:
             return True
 
-        if (request.method == 'PATCH' or request.method == 'DELETE') and obj.playlist.public_editable:
+        if (request.method == 'PATCH' or request.method == 'DELETE') \
+                and obj.playlist.public_editable:
             return True
 
         return False
