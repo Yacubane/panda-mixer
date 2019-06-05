@@ -7,7 +7,6 @@ class PlaylistConsumer(WebsocketConsumer):
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['playlist_link_id']
         self.room_group_name = 'chat_%s' % self.room_name
-        print(self.room_group_name)
 
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
