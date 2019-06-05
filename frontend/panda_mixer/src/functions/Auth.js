@@ -14,7 +14,7 @@ export default class Auth {
         let dateString = localStorage.getItem('JWT_TOKEN_GET_DATE');
         if (dateString == null) return false;
         let accessToken = localStorage.getItem('JWT_ACCESS_TOKEN');
-        if(accessToken === null || accessToken === "") return false;
+        if (accessToken === null || accessToken === "") return false;
         let date = new Date(dateString);
         if (isNaN(date)) return false;
         let currDate = new Date();
@@ -89,7 +89,7 @@ export default class Auth {
             if (!this.isLoggedIn() && this.wasLoggedIn()) {
                 this.refreshToken()
                     .then((response) => {
-                        this.fetch_(link, method, body, tries_num--)
+                        this.fetch_(link, method, body, tries_num - 1)
                             .then((response) => {
                                 resolve(response)
                             })
@@ -98,7 +98,7 @@ export default class Auth {
                             })
                     })
                     .catch((err) => {
-                        this.fetch_(link, method, body, tries_num--)
+                        this.fetch_(link, method, body, tries_num - 1)
                             .then((response) => {
                                 resolve(response)
                             })
@@ -118,15 +118,15 @@ export default class Auth {
                 )
                     .then((data) => {
                         if (status === 401 && data.code === "token_not_valid") {
-                            if(tries_num > 1 && this.isLoggedIn()) {
+                            if (tries_num > 1 && this.isLoggedIn()) {
                                 localStorage.removeItem('JWT_TOKEN_GET_DATE'); //try to refresh token in next iteration
-                                this.fetch_(link, method, body, tries_num--)
-                                .then((response) => {
-                                    resolve(response)
-                                })
-                                .catch((err) => {
-                                    reject(err)
-                                })
+                                this.fetch_(link, method, body, tries_num - 1)
+                                    .then((response) => {
+                                        resolve(response)
+                                    })
+                                    .catch((err) => {
+                                        reject(err)
+                                    })
                             } else {
                                 reject({ status: status, token_error: true, error: true, is_json: true, json: data })
                             }

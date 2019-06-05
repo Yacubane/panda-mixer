@@ -6,6 +6,7 @@ import CenterBox from '../components/CenterBox';
 import SiteLayout from '../components/SiteLayout';
 
 import Auth from '../functions/Auth';
+import logo from '../assets/logo.png'
 
 export default class Index extends Component {
     handleClick = (e) => {
@@ -16,8 +17,6 @@ export default class Index extends Component {
                 }
             })
             .catch((err) => {
-                console.log("aha2")
-
             })
     };
 
@@ -26,6 +25,7 @@ export default class Index extends Component {
             <SiteLayout>
                 <CenterBox>
                     <div className="Content">
+                        <img alt="logo" src={logo} width="400em" style={{ "margin-right": "0.7em", "max-width": "100%" }}></img>
                         <p className="Content-Header"> Panda Mixer</p>
                         <p className="Content-Text">
                             Panda Mixer is an app, where you can make music playlist cooperatively on YouTube.

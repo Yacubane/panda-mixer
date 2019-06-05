@@ -27,6 +27,9 @@ from rest_framework import status
 from django.db.models import Max
 
 
+youtube_key = "AIzaSyAKkadTlzyGJd2h1Gz6x0AwruEJK2ebX0E"
+
+
 def send_channel_message(group_name, message):
     channel_layer = get_channel_layer()
     async_to_sync(channel_layer.group_send)(
@@ -133,28 +136,25 @@ class PlaylistElementsView(generics.GenericAPIView):
         data = json.loads(request.body)
 
         url = "https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" \
-              + data['id'] + "&key=AIzaSyAKkadTlzyGJd2h1Gz6x0AwruEJK2ebX0E"
+              + data['id'] + "&key=" + youtube_key
 
         response = json.loads(requests.get(url).text)
 
-        create = True
         title = data['id']
         try:
             if response['pageInfo']['totalResults'] == 0:
-                create = False
                 return Response(status=status.HTTP_404_NOT_FOUND)
             title = response['items'][0]['snippet']['title']
         except (KeyError, json.JSONDecodeError):
             title = 'no title'
             pass
 
-        if create:
-            PlaylistElement.objects.create(
-                playlist=playlist,
-                data=data['id'],
-                order=next_order + 1,
-                title=title,
-            )
+        PlaylistElement.objects.create(
+            playlist=playlist,
+            data=data['id'],
+            order=next_order + 1,
+            title=title,
+        )
 
         # Notify users via websocket that playlist has been updated
         send_channel_message("chat_" + link_id, "PLAYLIST_ADD")
@@ -202,7 +202,7 @@ class PlaylistElementDetailsView(mixins.RetrieveModelMixin,
         playlist_element.order = max_order + 1
         playlist_element.save()
 
-        if (new_order < order):
+        if new_order < order:
             for i in range(order - 1, new_order - 1, -1):
                 elem = PlaylistElement.objects.get(playlist=playlist, order=i)
                 elem.order = i + 1
@@ -244,7 +244,6 @@ class PlaylistElementDetailsView(mixins.RetrieveModelMixin,
 
 def youtube_query(request, query):
     url = "https://www.googleapis.com/youtube/v3/search?part=snippet&type=" \
-          "video&maxResults=10&q=" + query + \
-          "&key=AIzaSyAKkadTlzyGJd2h1Gz6x0AwruEJK2ebX0E"
+          "video&maxResults=10&q=" + query + "&key=" + youtube_key
     response = json.loads(requests.get(url).text)
     return JsonResponse(response)

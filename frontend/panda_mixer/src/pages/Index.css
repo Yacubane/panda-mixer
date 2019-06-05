@@ -1,5 +1,6 @@
 .Content {
     text-align: center;
+    margin-bottom: 10em;
 }
 
 @media (min-width: 0em) {
