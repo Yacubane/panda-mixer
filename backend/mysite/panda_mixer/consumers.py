@@ -23,7 +23,7 @@ class PlaylistConsumer(WebsocketConsumer):
             self.channel_name
         )
 
-    def receive(self, text_data):
+    def receive(self, *args, **kwargs):
         pass
 
     def update(self, event):
