@@ -1,6 +1,4 @@
-
 <h1 align="center">
-  <br>
   <img src="https://raw.githubusercontent.com/jakubdybczak/panda-mixer/master/readme_assets/logo.png" alt="Panda Mixer" width="300">
   <br>Panda Mixer<br>
 </h1>
