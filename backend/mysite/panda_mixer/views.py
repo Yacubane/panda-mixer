@@ -27,7 +27,7 @@ from rest_framework import status
 from django.db.models import Max
 
 
-youtube_key = "AIzaSyAKkadTlzyGJd2h1Gz6x0AwruEJK2ebX0E"
+youtube_key = "AIzaSyBx68K64JAUn2zNYFtJfQAa4zoTK5MfTDw"
 
 
 def send_channel_message(group_name, message):
